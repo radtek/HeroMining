@@ -7,6 +7,12 @@
     <Version>1.1.0</Version>
     <AssemblyVersion>1.0.1.0</AssemblyVersion>
     <FileVersion>1.0.1.0</FileVersion>
+    <Copyright>fatherofhero</Copyright>
+    <PackageLicenseUrl>https://github.com/soemsri/HeroMining/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/soemsri/HeroMining</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/soemsri/HeroMining</RepositoryUrl>
+    <PackageTags>HeroMining</PackageTags>
+    <PackageReleaseNotes>support 1080ti, 1070ti, 1070, 1060</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>
