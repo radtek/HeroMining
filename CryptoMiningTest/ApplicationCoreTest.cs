@@ -293,6 +293,37 @@ namespace CryptoMiningTest
 
 
         [TestMethod]
+        public void TestGetMiningPriceAtCryptoBridgePerdayByMultiGpu1060x6GB()
+        {
+            BsodAPI api = new BsodAPI();
+            HashPower.SetupHardware("1060_6GB", 6);
+
+            CryptoCurrency coins = api.LoadCurrency();
+
+            MiningCalculator calc = new MiningCalculator();
+
+            SortedDictionary<string, double> prices = new SortedDictionary<string, double>();
+
+            foreach (string symbol in CurrencyName.Symbols)
+            {
+                if (coins[symbol] != null)
+                {
+                    double bahtPerDay = GetMiningBahtPerDay(symbol, coins[symbol].algo, PoolName.Bsod, ExchangeName.CryptoBridge, calc);
+                    prices.Add(symbol + " (" + coins[symbol].algo + ")", bahtPerDay);
+                }
+            }
+
+            foreach (KeyValuePair<string, double> item in prices)
+            {
+                Debug.WriteLine(string.Format("{0} = {1} ", item.Key, item.Value));
+            }
+
+            Assert.AreEqual(0, 0);
+
+        }
+
+
+        [TestMethod]
         public void TestGetMiningPriceAtCrex24PerdayByMultiGpu()
         {
             BsodAPI api = new BsodAPI();

@@ -1,1 +1,24 @@
-{"Chipsets":[{"Name":"1080ti","Count":18},{"Name":"1070ti","Count":6},{"Name":"1070","Count":7}]}
+{
+  "Chipsets": [
+    {
+      "Name": "1080ti",
+      "Count": 18
+    },
+    {
+      "Name": "1070ti",
+      "Count": 6
+    },
+    {
+      "Name": "1070",
+      "Count": 7
+    },
+    {
+      "Name": "1060_6GB",
+      "Count": 6
+    },
+    {
+      "Name": "1060_3GB",
+      "Count": 6
+    }
+  ]
+}

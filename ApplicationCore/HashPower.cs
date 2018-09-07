@@ -78,6 +78,50 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1070_x17", new HashPowerInfo(10000000, "H/s", 133));
             _hardwarePower.Add("1070_phi2", new HashPowerInfo(3300000, "H/s", 115));
             _hardwarePower.Add("1070_hex", new HashPowerInfo(9200000, "H/s", 115));
+
+            _hardwarePower.Add("1060_6GB_equihash", new HashPowerInfo(320, "Sol/s", 110));
+            _hardwarePower.Add("1060_6GB_equihash 192/7", new HashPowerInfo(12, "Sol/s", 100));
+            _hardwarePower.Add("1060_6GB_zhash", new HashPowerInfo(20, "Sol/s", 90));
+            _hardwarePower.Add("1060_6GB_ethash", new HashPowerInfo(22500000, "Sol/s", 90));
+            _hardwarePower.Add("1060_6GB_skein", new HashPowerInfo(492000000, "H/s", 102));
+            _hardwarePower.Add("1060_6GB_neoscrypt", new HashPowerInfo(620000, "H/s", 90));
+            _hardwarePower.Add("1060_6GB_xevan", new HashPowerInfo(2906000, "H/s", 102));
+            _hardwarePower.Add("1060_6GB_lyra2z", new HashPowerInfo(1700000, "H/s", 65));
+            _hardwarePower.Add("1060_6GB_keccak", new HashPowerInfo(675000000, "H/s", 96));
+            _hardwarePower.Add("1060_6GB_tribus", new HashPowerInfo(44000000, "H/s", 114));
+            _hardwarePower.Add("1060_6GB_skunkhash", new HashPowerInfo(28000000, "H/s", 90));
+            _hardwarePower.Add("1060_6GB_timetravel10", new HashPowerInfo(15000000, "H/s", 124));
+            _hardwarePower.Add("1060_6GB_phi1612", new HashPowerInfo(17900000, "H/s", 98));
+            _hardwarePower.Add("1060_6GB_lyra2v2", new HashPowerInfo(34500000, "H/s", 109));
+            _hardwarePower.Add("1060_6GB_c11", new HashPowerInfo(13000000, "H/s", 108));
+            _hardwarePower.Add("1060_6GB_blake2s", new HashPowerInfo(2570000000, "H/s", 121));
+            _hardwarePower.Add("1060_6GB_x16s", new HashPowerInfo(6500000, "H/s", 100));
+            _hardwarePower.Add("1060_6GB_x16r", new HashPowerInfo(6500000, "H/s", 100));
+            _hardwarePower.Add("1060_6GB_x17", new HashPowerInfo(7000000, "H/s", 103));
+            _hardwarePower.Add("1060_6GB_phi2", new HashPowerInfo(2400000, "H/s", 93));
+       
+
+            _hardwarePower.Add("1060_3GB_equihash", new HashPowerInfo(270, "Sol/s", 90));
+            _hardwarePower.Add("1060_3GB_equihash 192/7", new HashPowerInfo(9, "Sol/s", 90));
+            _hardwarePower.Add("1060_3GB_zhash", new HashPowerInfo(20, "Sol/s", 90));
+            _hardwarePower.Add("1060_3GB_ethash", new HashPowerInfo(19000000, "Sol/s", 90));
+            _hardwarePower.Add("1060_3GB_skein", new HashPowerInfo(281000000, "H/s", 99));
+            _hardwarePower.Add("1060_3GB_neoscrypt", new HashPowerInfo(562000, "H/s", 98));
+            _hardwarePower.Add("1060_3GB_xevan", new HashPowerInfo(1750000, "H/s", 84));
+            _hardwarePower.Add("1060_3GB_lyra2z", new HashPowerInfo(800000, "H/s", 60));
+            _hardwarePower.Add("1060_3GB_keccak", new HashPowerInfo(410000000, "H/s", 90));
+            _hardwarePower.Add("1060_3GB_tribus", new HashPowerInfo(27000000, "H/s", 93));
+            _hardwarePower.Add("1060_3GB_skunkhash", new HashPowerInfo(17270000, "H/s", 95));
+            _hardwarePower.Add("1060_3GB_timetravel10", new HashPowerInfo(9800000, "H/s", 107));
+            _hardwarePower.Add("1060_3GB_phi1612", new HashPowerInfo(10000000, "H/s", 87));
+            _hardwarePower.Add("1060_3GB_lyra2v2", new HashPowerInfo(22400000, "H/s", 85));
+            _hardwarePower.Add("1060_3GB_c11", new HashPowerInfo(9550000, "H/s", 93));
+            _hardwarePower.Add("1060_3GB_blake2s", new HashPowerInfo(2250000000, "H/s", 100));
+            _hardwarePower.Add("1060_3GB_x16s", new HashPowerInfo(6500000, "H/s", 100));
+            _hardwarePower.Add("1060_3GB_x16r", new HashPowerInfo(6500000, "H/s", 100));
+            _hardwarePower.Add("1060_3GB_x17", new HashPowerInfo(6000000, "H/s", 94));
+            _hardwarePower.Add("1060_3GB_phi2", new HashPowerInfo(2000000, "H/s", 82));
+
         }
 
         public static HashPowerInfo GetHashPowerInfo(string gpuModel, string algorithm)
@@ -91,7 +135,7 @@ namespace CryptoMining.ApplicationCore
         /// <summary>
         /// Enumerate your rig.
         /// </summary>
-        /// <param name="gpuChipset">GPU chipset now support 1080ti, 1070ti, 1070</param>
+        /// <param name="gpuChipset">GPU chipset now support 1080ti, 1070ti, 1070, 1060_6GB, 1060_3GB</param>
         /// <param name="count">GPU count</param>
         public static void SetupHardware(string gpuChipset, int count)
         {
