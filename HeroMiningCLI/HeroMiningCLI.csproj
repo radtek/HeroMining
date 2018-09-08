@@ -13,6 +13,7 @@
     <RepositoryUrl>https://github.com/soemsri/HeroMining</RepositoryUrl>
     <PackageTags>HeroMining</PackageTags>
     <PackageReleaseNotes>support 1080ti, 1070ti, 1070, 1060</PackageReleaseNotes>
+    <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
   </PropertyGroup>
 
   <ItemGroup>
