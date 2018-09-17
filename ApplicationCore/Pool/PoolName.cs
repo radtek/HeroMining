@@ -7,6 +7,8 @@ namespace CryptoMining.ApplicationCore.Pool
     public enum PoolName
     {
         Gos,
-        Bsod
+        Bsod,
+        PhiPhi,
+        Zerg
     }
 }

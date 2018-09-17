@@ -16,46 +16,7 @@ namespace CryptoMiningTest
     [TestClass]
     public class ApplicationCoreTest
     {
-        [TestMethod]
-        public void TestDeserializeBsod()
-        {
-            using (var client = new System.Net.Http.HttpClient())
-            {
-                // HTTP POST
-                client.BaseAddress = new Uri("http://api.bsod.pw");
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                var response = client.GetAsync("/api/currencies").Result;
-                string res = "";
-                using (HttpContent content = response.Content)
-                {
-                    // ... Read the string.
-                    Task<string> result = content.ReadAsStringAsync();
-                    res = result.Result;
-                    res = res.Replace("24h_blocks", "h24_blocks").Replace("24h_btc", "h24_btc");
-                    CryptoCurrency bsod = JsonConvert.DeserializeObject<CryptoCurrency>(res);
-                    CryptoCurrency.AEX aex = bsod.Aex;
-                    Assert.AreEqual(true, aex.h24_blocks > 0);
-
-                }
-            }
-        }
-
-        [TestMethod]
-        public void TestLoadCurrencyFromBsodPool()
-        {
-            BsodAPI api = new BsodAPI();
-            CryptoCurrency currencies = api.LoadCurrency();
-            Assert.AreEqual(true, currencies.Aex != null);
-        }
-
-        [TestMethod]
-        public void TestLoadCurrencyFromGosPool()
-        {
-            GosAPI api = new GosAPI();
-            CryptoCurrency currencies = api.LoadCurrency();
-            Assert.AreEqual(true, currencies.Mano != null);
-        }
-
+       
         [TestMethod]
         public void TestLoadCurrencyFromCrex24()
         {
@@ -82,35 +43,7 @@ namespace CryptoMiningTest
         }
 
 
-        [TestMethod]
-        public void TestGetMiningManoCoinFromBsodPerday()
-        {
-            long myHashRate = 120000000L;
-            BsodAPI api = new BsodAPI();
-            CryptoCurrency currencies = api.LoadCurrency();
-            CryptoCurrency.MANO manoCoin = currencies.Mano;
-            double rewardPerBlock = double.Parse(manoCoin.reward);
-            int blockAllDay = manoCoin.h24_blocks;
-            long poolHashRate = manoCoin.hashrate??0;
-            double receiveBlockPerDay = (rewardPerBlock / (double)poolHashRate) * myHashRate * blockAllDay;
-            Assert.AreEqual(true, receiveBlockPerDay > 0);
-        }
-
-
-        [TestMethod]
-        public void TestGetMiningManoCoinFromGosPerday()
-        {
-            long myHashRate = 120000000L;
-            GosAPI api = new GosAPI();
-            CryptoCurrency currencies = api.LoadCurrency();
-            CryptoCurrency.MANO manoCoin = currencies.Mano;
-            double rewardPerBlock = double.Parse(manoCoin.reward);
-            int blockAllDay = manoCoin.h24_blocks;
-            long poolHashRate = manoCoin.hashrate??0;
-            double receiveBlockPerDay = (rewardPerBlock / (double)poolHashRate) * myHashRate * blockAllDay;
-            Assert.AreEqual(true, receiveBlockPerDay > 0);
-        }
-
+   
         [TestMethod]
         public void TestLoadCryptoBridgeCoinPrice()
         {
@@ -474,7 +407,6 @@ namespace CryptoMiningTest
                         result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "crex24", bahtPerDay));
                     }
                 }
-
             }
 
             Console.WriteLine("1080ti x 18 ");
@@ -494,6 +426,50 @@ namespace CryptoMiningTest
 
             Assert.AreEqual(0, 0);
 
+        }
+
+
+
+        [TestMethod]
+        public void TestGetAutoBtcMiningPerDayFromZergPool()
+        {
+            string json = System.IO.File.ReadAllText("myrig.json");
+            Rig myRig = JsonConvert.DeserializeObject<Rig>(json);
+
+            HashPower.SetupHardware(myRig);
+
+            MiningCalculator calc = new MiningCalculator();
+
+            foreach (string algorithmName in AlgoritmName.Symbols)
+            {
+                calc.MyHashRate = HashPower.GetAlgorithmHashRate(algorithmName);
+                double btcCurrentPerDay = calc.GetTotalBtcMiningPerday(algorithmName, PoolName.Zerg, true);
+                double btc24HoursPerDay = calc.GetTotalBtcMiningPerday(algorithmName, PoolName.Zerg, false);
+                Debug.WriteLine(string.Format("{0} estimate_current: {1} estimate_24hour: {2}", algorithmName, btcCurrentPerDay.ToString("N8"), btc24HoursPerDay.ToString("N8")));
+                Assert.AreEqual(true, btcCurrentPerDay > -1);
+            }
+        }
+
+
+
+        [TestMethod]
+        public void TestGetTotalBahtAutoBtcMiningPerDayFromZergPool()
+        {
+            string json = System.IO.File.ReadAllText("myrig.json");
+            Rig myRig = JsonConvert.DeserializeObject<Rig>(json);
+
+            HashPower.SetupHardware(myRig);
+
+            MiningCalculator calc = new MiningCalculator();
+
+            foreach (string algorithmName in AlgoritmName.Symbols)
+            {
+                calc.MyHashRate = HashPower.GetAlgorithmHashRate(algorithmName);
+                double btcCurrentPerDay = calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zerg, true);
+                double btc24HoursPerDay = calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zerg, false);
+                Debug.WriteLine(string.Format("{0} estimate_current: {1} baht estimate_24hour: {2} baht ", algorithmName, btcCurrentPerDay.ToString("N2"), btc24HoursPerDay.ToString("N2")));
+                Assert.AreEqual(true, btcCurrentPerDay > -1);
+            }
         }
 
     }

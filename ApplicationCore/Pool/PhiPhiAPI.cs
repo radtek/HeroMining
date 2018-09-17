@@ -8,38 +8,38 @@ using System.Threading.Tasks;
 
 namespace CryptoMining.ApplicationCore.Pool
 {
-    public class GosAPI
+    public class PhiPhiAPI
     {
         /// <summary>
-        /// Load coin mining data from gos pool
+        /// Load algorithm status from phi-phi-pool.com pool
         /// </summary>
         /// <returns></returns>
-        /// <exception cref="Exception">Get data from gos.cx web api failed.</exception>
-        public CryptoCurrency LoadCurrency()
+        /// <exception cref="Exception">Get data from phi-phi-pool.com web api failed.</exception>
+        public Algorithm LoadAlgorithm()
         {
             try
             {
                 using (var client = new System.Net.Http.HttpClient())
                 {
                     // HTTP POST
-                    client.BaseAddress = new Uri("https://gos.cx");
+                    client.BaseAddress = new Uri("http://www.phi-phi-pool.com");
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-                    var response = client.GetAsync("/api/currencies").Result;
+                    var response = client.GetAsync("/api/status").Result;
                     string res = "";
                     using (HttpContent content = response.Content)
                     {
                         // ... Read the string.
                         Task<string> result = content.ReadAsStringAsync();
                         res = result.Result;
-                        res = res.Replace("24h_blocks", "h24_blocks").Replace("24h_btc", "h24_btc").Replace("24h_coins", "h24_coins").Replace("block_reward","reward");
-                        CryptoCurrency coins = JsonConvert.DeserializeObject<CryptoCurrency>(res);
-                        return coins;
+                        res = res.Replace("argon2d-dyn", "argon2d_dyn").Replace("myr-gr", "myr_gr");
+                        Algorithm algor = JsonConvert.DeserializeObject<Algorithm>(res);
+                        return algor;
                     }
                 }
             }
             catch (Exception err)
             {
-                throw new Exception("Get data from gos.cx pool web api failed.", err);
+                throw new Exception("Get algorithm status from zergpool web api failed. [http://www.phi-phi-pool.com/api/status]", err);
             }
         }
     }

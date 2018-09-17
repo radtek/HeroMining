@@ -14,7 +14,7 @@ namespace CryptoMining.ApplicationCore
         static HashPower()
         {
             _hardwarePower.Add("1080ti_equihash", new HashPowerInfo(635, "Sol/s", 190));
-            _hardwarePower.Add("1080ti_equihash 192/7", new HashPowerInfo(30, "Sol/s", 180));
+            _hardwarePower.Add("1080ti_equihash192", new HashPowerInfo(30, "Sol/s", 180));
             _hardwarePower.Add("1080ti_zhash", new HashPowerInfo(57, "Sol/s", 180));
             _hardwarePower.Add("1080ti_ethash", new HashPowerInfo(35000000, "Sol/s", 140));
             _hardwarePower.Add("1080ti_skein", new HashPowerInfo(863500000, "H/s", 217));
@@ -36,7 +36,7 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1080ti_hex", new HashPowerInfo(14500000, "H/s", 150));
 
             _hardwarePower.Add("1070ti_equihash", new HashPowerInfo(500, "Sol/s", 105));
-            _hardwarePower.Add("1070ti_equihash 192/7", new HashPowerInfo(21, "Sol/s", 150));
+            _hardwarePower.Add("1070ti_equihash192", new HashPowerInfo(21, "Sol/s", 150));
             _hardwarePower.Add("1070ti_zhash", new HashPowerInfo(32, "Sol/s", 120));
             _hardwarePower.Add("1070ti_ethash", new HashPowerInfo(30500000, "Sol/s", 130));
             _hardwarePower.Add("1070ti_skein", new HashPowerInfo(614500000, "H/s", 141));
@@ -58,7 +58,7 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1070ti_hex", new HashPowerInfo(9500000, "H/s", 106));
 
             _hardwarePower.Add("1070_equihash", new HashPowerInfo(430, "Sol/s", 120));
-            _hardwarePower.Add("1070_equihash 192/7", new HashPowerInfo(20, "Sol/s", 150));
+            _hardwarePower.Add("1070_equihash192", new HashPowerInfo(20, "Sol/s", 150));
             _hardwarePower.Add("1070_zhash", new HashPowerInfo(30, "Sol/s", 150));
             _hardwarePower.Add("1070_ethash", new HashPowerInfo(30000000, "Sol/s", 120));
             _hardwarePower.Add("1070_skein", new HashPowerInfo(492000000, "H/s", 137));
@@ -80,7 +80,7 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1070_hex", new HashPowerInfo(9200000, "H/s", 115));
 
             _hardwarePower.Add("1060_6GB_equihash", new HashPowerInfo(320, "Sol/s", 110));
-            _hardwarePower.Add("1060_6GB_equihash 192/7", new HashPowerInfo(12, "Sol/s", 100));
+            _hardwarePower.Add("1060_6GB_equihash192", new HashPowerInfo(12, "Sol/s", 100));
             _hardwarePower.Add("1060_6GB_zhash", new HashPowerInfo(20, "Sol/s", 90));
             _hardwarePower.Add("1060_6GB_ethash", new HashPowerInfo(22500000, "Sol/s", 90));
             _hardwarePower.Add("1060_6GB_skein", new HashPowerInfo(492000000, "H/s", 102));
@@ -102,7 +102,7 @@ namespace CryptoMining.ApplicationCore
        
 
             _hardwarePower.Add("1060_3GB_equihash", new HashPowerInfo(270, "Sol/s", 90));
-            _hardwarePower.Add("1060_3GB_equihash 192/7", new HashPowerInfo(9, "Sol/s", 90));
+            _hardwarePower.Add("1060_3GB_equihash192", new HashPowerInfo(9, "Sol/s", 90));
             _hardwarePower.Add("1060_3GB_zhash", new HashPowerInfo(20, "Sol/s", 90));
             _hardwarePower.Add("1060_3GB_ethash", new HashPowerInfo(19000000, "Sol/s", 90));
             _hardwarePower.Add("1060_3GB_skein", new HashPowerInfo(281000000, "H/s", 99));

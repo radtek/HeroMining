@@ -15,7 +15,7 @@ namespace CryptoMining.ApplicationCore.Pool
         public int workers { get; set; }
         public int shares { get; set; }
         public Int64? hashrate { get; set; }
-        public long network_hashrate { get; set; }
+        public string network_hashrate { get; set; }
         public string estimate { get; set; }
         public string percent_blocks { get; set; }
         public int h24_blocks { get; set; }
