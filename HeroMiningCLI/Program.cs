@@ -325,7 +325,7 @@ namespace HeroMiningCLI
             Console.WriteLine("-help or -h\tshow usage command.");
             Console.WriteLine("-f         \tsave output to file. example -f output.csv.");
             Console.WriteLine("-g         \tShow only record mining more than a number specify. example -g 100");
-            Console.WriteLine("-m         \tMonitor a specific coin. example -m mano");
+            Console.WriteLine("-m         \tMonitor a specific coin. example -m rvn");
             Console.WriteLine("-t         \tShow number of coin that will receive mining per day");
             Console.WriteLine("-debug     \tshow debug message.");
         }
