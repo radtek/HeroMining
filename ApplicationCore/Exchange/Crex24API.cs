@@ -33,7 +33,7 @@ namespace CryptoMining.ApplicationCore.Exchange
             }
             catch (Exception err)
             {
-                throw new Exception("Can't load coin price from crypto-bridge exchange.", err);
+                throw new Exception("Can't load coin price from crex24.com exchange.", err);
             }
         }
 

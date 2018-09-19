@@ -16,12 +16,12 @@ namespace CryptoMining.ApplicationCore
         private ZergAPI _zergAPI = new ZergAPI();
         private PhiPhiAPI _phiAPI = new PhiPhiAPI();
         private BxAPI _bxAPI = new BxAPI();
-        private List<CryptoBridgeCurrency> _cryptoBridgeCoinsPrice;
-        private List<Crex24Currency> _crex24CoinsPrice;
-        private CryptoCurrency _bsodCurrencies;
-        private CryptoCurrency _gosCurrencies;
-        private Algorithm _zergAlgorithm;
-        private Algorithm _phiAlgorithm;
+        private List<CryptoBridgeCurrency> _cryptoBridgeCoinsPrice = new List<CryptoBridgeCurrency>();
+        private List<Crex24Currency> _crex24CoinsPrice = new List<Crex24Currency>();
+        private CryptoCurrency _bsodCurrencies = new CryptoCurrency();
+        private CryptoCurrency _gosCurrencies = new CryptoCurrency();
+        private Algorithm _zergAlgorithm = new Algorithm();
+        private Algorithm _phiAlgorithm = new Algorithm();
 
         private double _thaiBahtPerBTC = 0;
 
@@ -29,11 +29,46 @@ namespace CryptoMining.ApplicationCore
         {
             MyHashRate = -1;
             _cryptoBridgeCoinsPrice = _cbAPI.LoadPrice();
-            _crex24CoinsPrice = _crexAPI.LoadPrice();
-            _bsodCurrencies = _bsodAPI.LoadCurrency();
-            _gosCurrencies = _gosAPI.LoadCurrency();
-            _zergAlgorithm = _zergAPI.LoadAlgorithm();
-            _phiAlgorithm = _phiAPI.LoadAlgorithm();
+            try
+            {
+                _crex24CoinsPrice = _crexAPI.LoadPrice();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+            try
+            {
+                _bsodCurrencies = _bsodAPI.LoadCurrency();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+            try
+            {
+                _gosCurrencies = _gosAPI.LoadCurrency();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+            try
+            {
+                _zergAlgorithm = _zergAPI.LoadAlgorithm();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+            try
+            {
+                _phiAlgorithm = _phiAPI.LoadAlgorithm();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
             _thaiBahtPerBTC = double.Parse(_bxAPI.LoadThaiBahtBtcPrice().bids[0][0]);
         }
 
@@ -195,7 +230,7 @@ namespace CryptoMining.ApplicationCore
             {
                 algor = _zergAlgorithm[algorithmName];
             }
-            else if(poolName == PoolName.PhiPhi)
+            else if (poolName == PoolName.PhiPhi)
             {
                 algor = _phiAlgorithm[algorithmName];
             }

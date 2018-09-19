@@ -4,7 +4,7 @@ using System.Text;
 
 namespace CryptoMining.ApplicationCore.Pool
 {
-    public class AlgorithmBase
+    public class AlgorithmBase 
     {
         public string name { get; set; }
         public int port { get; set; }
