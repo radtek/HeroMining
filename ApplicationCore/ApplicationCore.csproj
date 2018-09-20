@@ -4,15 +4,15 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>CryptoMining.ApplicationCore</AssemblyName>
     <RootNamespace>CryptoMining.ApplicationCore</RootNamespace>
-    <Version>1.2.1</Version>
+    <Version>1.3.0</Version>
     <Copyright>fatherofhero</Copyright>
     <PackageLicenseUrl>https://github.com/soemsri/HeroMining/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/soemsri/HeroMining</PackageProjectUrl>
     <RepositoryUrl>https://github.com/soemsri/HeroMining</RepositoryUrl>
     <PackageTags>HeroMining</PackageTags>
     <PackageReleaseNotes>support 1080ti, 1070ti, 1070, 1060</PackageReleaseNotes>
-    <AssemblyVersion>1.2.1.0</AssemblyVersion>
-    <FileVersion>1.2.1.0</FileVersion>
+    <AssemblyVersion>1.3.0.0</AssemblyVersion>
+    <FileVersion>1.3.0.0</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

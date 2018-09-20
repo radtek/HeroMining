@@ -14,11 +14,31 @@
     },
     {
       "Name": "1060_6GB",
-      "Count": 6
+      "Count": 0
     },
     {
       "Name": "1060_3GB",
-      "Count": 6
+      "Count": 0
+    },
+    {
+      "Name": "1050ti",
+      "Count": 0
+    },
+    {
+      "Name": "rx_vega_64",
+      "Count": 0
+    },
+    {
+      "Name": "rx_vega_56",
+      "Count": 0
+    },
+    {
+      "Name": "rx_580",
+      "Count": 0
+    },
+    {
+      "Name": "rx_570",
+      "Count": 0
     }
   ]
 }
