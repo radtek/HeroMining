@@ -153,6 +153,19 @@ namespace HeroMiningCLI
                             coinsResult.Add(coin);
                         }
 
+                        bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Cryptopia);
+                        if (bahtPerDay > keepMoreThan)
+                        {
+                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "cryptopia", bahtPerDay));
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Bsod;
+                            coin.algo = bsodCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.Cryptopia;
+                            coinsResult.Add(coin);
+                        }
+
                         if (_needToShowCoinsNumPerDay)
                             ShowNumOfCoinMiningPerDay(symbol, PoolName.Bsod);
                     }
@@ -185,6 +198,20 @@ namespace HeroMiningCLI
                             coin.Exchange = ExchangeName.Crex24;
                             coinsResult.Add(coin);
                         }
+
+                        bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Cryptopia);
+                        if (bahtPerDay > keepMoreThan)
+                        {
+                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "cryptopia", bahtPerDay));
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Gos;
+                            coin.algo = gosCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.Cryptopia;
+                            coinsResult.Add(coin);
+                        }
+
                         if (_needToShowCoinsNumPerDay)
                             ShowNumOfCoinMiningPerDay(symbol, PoolName.Gos);
                     }
@@ -287,6 +314,19 @@ namespace HeroMiningCLI
                             coin.Exchange = ExchangeName.Crex24;
                             coinsResult.Add(coin);
                         }
+
+                        bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Cryptopia);
+                        if (bahtPerDay > keepMoreThan)
+                        {
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Bsod;
+                            coin.algo = bsodCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.Cryptopia;
+                            coinsResult.Add(coin);
+                        }
+
                         if (_needToShowCoinsNumPerDay)
                             ShowNumOfCoinMiningPerDay(symbol, PoolName.Bsod);
                     }
@@ -317,6 +357,19 @@ namespace HeroMiningCLI
                             coin.Exchange = ExchangeName.Crex24;
                             coinsResult.Add(coin);
                         }
+
+                        bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Cryptopia);
+                        if (bahtPerDay > keepMoreThan)
+                        {
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Gos;
+                            coin.algo = gosCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.Cryptopia;
+                            coinsResult.Add(coin);
+                        }
+
                         if (_needToShowCoinsNumPerDay)
                             ShowNumOfCoinMiningPerDay(symbol, PoolName.Gos);
                     }

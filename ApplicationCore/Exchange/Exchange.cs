@@ -7,6 +7,7 @@ namespace CryptoMining.ApplicationCore.Exchange
     public enum ExchangeName
     {
         CryptoBridge,
+        Cryptopia,
         Crex24
     }
 }

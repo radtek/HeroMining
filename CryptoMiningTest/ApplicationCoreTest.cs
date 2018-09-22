@@ -30,17 +30,7 @@ namespace CryptoMiningTest
         }
 
 
-        [TestMethod]
-        public void TestLoadCurrencyFromCryptoBridge()
-        {
-            CryptoBridgeAPI api = new CryptoBridgeAPI();
-            List<CryptoBridgeCurrency> coins = api.LoadPrice();
-            foreach (ExchangeCurrency coin in coins)
-            {
-                Debug.WriteLine(string.Format("{0} bid={1} ask={2} last={3} volume={4} ", coin.symbol, coin.bid, coin.ask, coin.last, coin.volume));
-            }
-            Assert.AreEqual(true, coins.Count > 0);
-        }
+
 
 
    
@@ -83,15 +73,7 @@ namespace CryptoMiningTest
         }
 
 
-        [TestMethod]
-        public void TestLoadThaiBahtBtcPrice()
-        {
-            BxAPI api = new BxAPI();
-            BxThbBtcOrderBook orderbook = api.LoadThaiBahtBtcPrice();
-            double bahtPerBtcPrice = double.Parse(orderbook.bids[0][0]); // bid price
-            Assert.AreEqual(true, bahtPerBtcPrice > 0);
 
-        }
 
         [TestMethod]
         public void TestGetTotalBahtMiningFromBsodPerday()

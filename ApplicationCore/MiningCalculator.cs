@@ -10,6 +10,7 @@ namespace CryptoMining.ApplicationCore
     public class MiningCalculator
     {
         private CryptoBridgeAPI _cbAPI = new CryptoBridgeAPI();
+        private CryptopiaAPI _cpAPI = new CryptopiaAPI();
         private Crex24API _crexAPI = new Crex24API();
         private BsodAPI _bsodAPI = new BsodAPI();
         private GosAPI _gosAPI = new GosAPI();
@@ -18,6 +19,7 @@ namespace CryptoMining.ApplicationCore
         private BxAPI _bxAPI = new BxAPI();
         private List<CryptoBridgeCurrency> _cryptoBridgeCoinsPrice = new List<CryptoBridgeCurrency>();
         private List<Crex24Currency> _crex24CoinsPrice = new List<Crex24Currency>();
+        private List<CryptopiaCurrency> _cryptopiaCoinsPrice = new List<CryptopiaCurrency>();
         private CryptoCurrency _bsodCurrencies = new CryptoCurrency();
         private CryptoCurrency _gosCurrencies = new CryptoCurrency();
         private Algorithm _zergAlgorithm = new Algorithm();
@@ -28,7 +30,22 @@ namespace CryptoMining.ApplicationCore
         public MiningCalculator()
         {
             MyHashRate = -1;
-            _cryptoBridgeCoinsPrice = _cbAPI.LoadPrice();
+            try
+            {
+                _cryptopiaCoinsPrice = _cpAPI.LoadPrice();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+            try
+            {
+                _cryptoBridgeCoinsPrice = _cbAPI.LoadPrice();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
             try
             {
                 _crex24CoinsPrice = _crexAPI.LoadPrice();
@@ -112,6 +129,18 @@ namespace CryptoMining.ApplicationCore
                 Debug.WriteLine(string.Format("Can't find price of {0} on {1} exchange.", pairSymbol, exchangeName));
                 return 0;
             }
+            else if (exchangeName == ExchangeName.Cryptopia)
+            {
+                foreach (ExchangeCurrency coin in _cryptopiaCoinsPrice)
+                {
+                    if (coin.symbol == pairSymbol)
+                    {
+                        return GetBidPrice(coin);
+                    }
+                }
+                Debug.WriteLine(string.Format("Can't find price of {0} on {1} exchange.", pairSymbol, exchangeName));
+                return 0;
+            }
             else
             {
                 foreach (ExchangeCurrency coin in _crex24CoinsPrice)
@@ -134,6 +163,7 @@ namespace CryptoMining.ApplicationCore
         public void RefreshPrice()
         {
             _cryptoBridgeCoinsPrice = _cbAPI.LoadPrice();
+            _cryptopiaCoinsPrice = _cpAPI.LoadPrice();
             _crex24CoinsPrice = _crexAPI.LoadPrice();
             _thaiBahtPerBTC = double.Parse(_bxAPI.LoadThaiBahtBtcPrice().bids[0][0]);
         }
