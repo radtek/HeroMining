@@ -93,6 +93,25 @@ namespace CryptoMiningTest
 
 
         [TestMethod]
+        public void TestLoadAlgorithmFromZpool()
+        {
+            ZpoolAPI api = new ZpoolAPI();
+            Algorithm algor = api.LoadAlgorithm();
+            Assert.AreEqual(true, algor.lyra2z != null);
+        }
+
+
+        [TestMethod]
+        public void TestLoadAlgorithmFromAhashPool()
+        {
+            AhashPoolAPI api = new AhashPoolAPI();
+            Algorithm algor = api.LoadAlgorithm();
+            Assert.AreEqual(true, algor.lyra2z != null);
+        }
+
+
+
+        [TestMethod]
         public void TestGetMiningManoCoinFromBsodPerday()
         {
             long myHashRate = 120000000L;

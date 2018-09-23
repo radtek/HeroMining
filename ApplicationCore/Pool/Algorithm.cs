@@ -28,6 +28,11 @@ namespace CryptoMining.ApplicationCore.Pool
 
         }
 
+        public class Bcd : AlgorithmBase
+        {
+
+        }
+
         public class Bitcore : AlgorithmBase
         {
 
@@ -38,11 +43,23 @@ namespace CryptoMining.ApplicationCore.Pool
 
         }
 
+        public class Blakecoin : AlgorithmBase
+        {
+
+        }
+
         public class C11 : AlgorithmBase
         {
 
 
         }
+
+        public class Decred : AlgorithmBase
+        {
+
+
+        }
+
 
         public class Equihash : AlgorithmBase
         {
@@ -67,6 +84,13 @@ namespace CryptoMining.ApplicationCore.Pool
 
 
         }
+
+        public class Groestl : AlgorithmBase
+        {
+            
+
+        }
+        
 
         public class Hex : AlgorithmBase
         {
@@ -161,7 +185,25 @@ namespace CryptoMining.ApplicationCore.Pool
 
         }
 
+        public class ScryptLd : AlgorithmBase
+        {
+
+
+        }
+
+        public class Sib : AlgorithmBase
+        {
+
+
+        }
+
         public class Sha256 : AlgorithmBase
+        {
+
+
+        }
+
+        public class Sha256t : AlgorithmBase
         {
 
 
@@ -267,6 +309,9 @@ namespace CryptoMining.ApplicationCore.Pool
         [JsonProperty("balloon")]
         public Balloon balloon { get; set; }
 
+        [JsonProperty("bcd")]
+        public Bcd bcd { get; set; }
+
         [JsonProperty("bitcore")]
         public Bitcore bitcore { get; set; }
 
@@ -275,6 +320,9 @@ namespace CryptoMining.ApplicationCore.Pool
 
         [JsonProperty("c11")]
         public C11 c11 { get; set; }
+
+        [JsonProperty("decred")]
+        public Decred decred { get; set; }
 
         [JsonProperty("equihash")]
         public Equihash equihash { get; set; }
@@ -287,6 +335,9 @@ namespace CryptoMining.ApplicationCore.Pool
 
         [JsonProperty("equihash96")]
         public Equihash96 equihash96 { get; set; }
+
+        [JsonProperty("groestl")]
+        public Groestl groestl { get; set; }
 
         [JsonProperty("hex")]
         public Hex hex { get; set; }
@@ -339,8 +390,17 @@ namespace CryptoMining.ApplicationCore.Pool
         [JsonProperty("scrypt")]
         public Scrypt scrypt { get; set; }
 
+        [JsonProperty("scrypt_ld")]
+        public ScryptLd scrypt_ld { get; set; }
+
+        [JsonProperty("sib")]
+        public Sib sib{ get; set; }
+
         [JsonProperty("sha256")]
         public Sha256 sha256 { get; set; }
+
+        [JsonProperty("sha256t")]
+        public Sha256t sha256t { get; set; }
 
         [JsonProperty("skein")]
         public Skein skein { get; set; }
@@ -402,12 +462,16 @@ namespace CryptoMining.ApplicationCore.Pool
                         return argon2d_dyn;
                     case "balloon":
                         return balloon;
+                    case "bcd":
+                        return bcd;
                     case "bitcore":
                         return bitcore;
                     case "blake2s":
                         return blake2s;
                     case "c11":
                         return c11;
+                    case "decred":
+                        return decred;
                     case "equihash":
                         return equihash;
                     case "equihash144":
@@ -416,6 +480,8 @@ namespace CryptoMining.ApplicationCore.Pool
                         return equihash192;
                     case "equihash96":
                         return equihash96;
+                    case "groestl":
+                        return groestl;
                     case "hex":
                         return hex;
                     case "hmq1725":
@@ -450,8 +516,14 @@ namespace CryptoMining.ApplicationCore.Pool
                         return qubit;
                     case "scrypt":
                         return scrypt;
+                    case "scrypt_ld":
+                        return scrypt_ld;
+                    case "sib":
+                        return sib;
                     case "sha256":
                         return sha256;
+                    case "sha256t":
+                        return sha256t;
                     case "skein":
                         return skein;
                     case "skunk":

@@ -3,6 +3,7 @@ using CryptoMining.ApplicationCore.Exchange;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Text;
 
 namespace CryptoMining.ApplicationCore
@@ -16,6 +17,8 @@ namespace CryptoMining.ApplicationCore
         private GosAPI _gosAPI = new GosAPI();
         private ZergAPI _zergAPI = new ZergAPI();
         private PhiPhiAPI _phiAPI = new PhiPhiAPI();
+        private AhashPoolAPI _ahashAPI = new AhashPoolAPI();
+        private ZpoolAPI _zpoolAPI = new ZpoolAPI();
         private BxAPI _bxAPI = new BxAPI();
         private List<CryptoBridgeCurrency> _cryptoBridgeCoinsPrice = new List<CryptoBridgeCurrency>();
         private List<Crex24Currency> _crex24CoinsPrice = new List<Crex24Currency>();
@@ -24,12 +27,14 @@ namespace CryptoMining.ApplicationCore
         private CryptoCurrency _gosCurrencies = new CryptoCurrency();
         private Algorithm _zergAlgorithm = new Algorithm();
         private Algorithm _phiAlgorithm = new Algorithm();
+        private Algorithm _zpoolAlgorithm = new Algorithm();
+        private Algorithm _ahashAlgorithm = new Algorithm();
+
 
         private double _thaiBahtPerBTC = 0;
 
-        public MiningCalculator()
+        private void LoadCryptopiaPrice()
         {
-            MyHashRate = -1;
             try
             {
                 _cryptopiaCoinsPrice = _cpAPI.LoadPrice();
@@ -38,6 +43,10 @@ namespace CryptoMining.ApplicationCore
             {
                 Debug.WriteLine("Warning: " + err.Message);
             }
+        }
+
+        private void LoadCryptoBridgePrice()
+        {
             try
             {
                 _cryptoBridgeCoinsPrice = _cbAPI.LoadPrice();
@@ -46,6 +55,11 @@ namespace CryptoMining.ApplicationCore
             {
                 Debug.WriteLine("Warning: " + err.Message);
             }
+        }
+
+
+        private void LoadCrex2Price()
+        {
             try
             {
                 _crex24CoinsPrice = _crexAPI.LoadPrice();
@@ -54,6 +68,10 @@ namespace CryptoMining.ApplicationCore
             {
                 Debug.WriteLine("Warning: " + err.Message);
             }
+        }
+
+        private void LoadBsodCurrencies()
+        {
             try
             {
                 _bsodCurrencies = _bsodAPI.LoadCurrency();
@@ -62,6 +80,10 @@ namespace CryptoMining.ApplicationCore
             {
                 Debug.WriteLine("Warning: " + err.Message);
             }
+        }
+
+        private void LoadGosCurrencies()
+        {
             try
             {
                 _gosCurrencies = _gosAPI.LoadCurrency();
@@ -70,6 +92,10 @@ namespace CryptoMining.ApplicationCore
             {
                 Debug.WriteLine("Warning: " + err.Message);
             }
+        }
+
+        private void LoadZergAlgorithm()
+        {
             try
             {
                 _zergAlgorithm = _zergAPI.LoadAlgorithm();
@@ -78,6 +104,34 @@ namespace CryptoMining.ApplicationCore
             {
                 Debug.WriteLine("Warning: " + err.Message);
             }
+        }
+
+        private void LoadZpoolAlgorithm()
+        {
+            try
+            {
+                _zpoolAlgorithm = _zpoolAPI.LoadAlgorithm();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+        }
+
+        private void LoadAhashAlgorithm()
+        {
+            try
+            {
+                _ahashAlgorithm = _ahashAPI.LoadAlgorithm();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+        }
+
+        private void LoadPhiPhiAlgorithm()
+        {
             try
             {
                 _phiAlgorithm = _phiAPI.LoadAlgorithm();
@@ -86,6 +140,22 @@ namespace CryptoMining.ApplicationCore
             {
                 Debug.WriteLine("Warning: " + err.Message);
             }
+        }
+
+        public MiningCalculator()
+        {
+            MyHashRate = -1;
+            Parallel.Invoke(
+                () => LoadCryptopiaPrice(),
+                () => LoadCryptoBridgePrice(),
+                () => LoadCrex2Price(),
+                () => LoadBsodCurrencies(),
+                () => LoadGosCurrencies(),
+                () => LoadZergAlgorithm(),
+                () => LoadPhiPhiAlgorithm(),
+                () => LoadZpoolAlgorithm(),
+                () => LoadAhashAlgorithm());
+
             _thaiBahtPerBTC = double.Parse(_bxAPI.LoadThaiBahtBtcPrice().bids[0][0]);
         }
 
@@ -104,7 +174,7 @@ namespace CryptoMining.ApplicationCore
         {
             get
             {
-                return new List<Algorithm> { _zergAlgorithm, _phiAlgorithm };
+                return new List<Algorithm> { _zergAlgorithm, _phiAlgorithm, _zpoolAlgorithm, _ahashAlgorithm };
             }
         }
 
@@ -162,17 +232,21 @@ namespace CryptoMining.ApplicationCore
 
         public void RefreshPrice()
         {
-            _cryptoBridgeCoinsPrice = _cbAPI.LoadPrice();
-            _cryptopiaCoinsPrice = _cpAPI.LoadPrice();
-            _crex24CoinsPrice = _crexAPI.LoadPrice();
+            Parallel.Invoke(
+               () => LoadCryptoBridgePrice(),
+               () => LoadCryptopiaPrice(),
+               () => LoadCrex2Price());
             _thaiBahtPerBTC = double.Parse(_bxAPI.LoadThaiBahtBtcPrice().bids[0][0]);
         }
 
         public void RefreshPool()
         {
-            _bsodCurrencies = _bsodAPI.LoadCurrency();
-            _gosCurrencies = _gosAPI.LoadCurrency();
-            _zergAlgorithm = _zergAPI.LoadAlgorithm();
+            Parallel.Invoke(
+                () => LoadBsodCurrencies(),
+                () => LoadGosCurrencies(),
+                () => LoadAhashAlgorithm(),
+                () => LoadZergAlgorithm(),
+                () => LoadZpoolAlgorithm());
         }
 
         public double GetNumOfCoinMiningPerDay(string coinSymbol, PoolName poolName)
@@ -264,7 +338,14 @@ namespace CryptoMining.ApplicationCore
             {
                 algor = _phiAlgorithm[algorithmName];
             }
-
+            else if (poolName == PoolName.AhashPool)
+            {
+                algor = _ahashAlgorithm[algorithmName];
+            }
+            else if (poolName == PoolName.Zpool)
+            {
+                algor = _zpoolAlgorithm[algorithmName];
+            }
             if (algor != null)
             {
                 if (estimateCurrent)
@@ -274,7 +355,7 @@ namespace CryptoMining.ApplicationCore
             }
             else
             {
-                Debug.WriteLine(string.Format("Error: Not found algorithm {0} at {1} pool.", algorithmName, poolName));
+                Debug.WriteLine(string.Format("WARNING: Not found algorithm {0} at {1} pool.", algorithmName, poolName));
 
             }
             return btcPerDay;

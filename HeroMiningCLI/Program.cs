@@ -107,6 +107,9 @@ namespace HeroMiningCLI
             CryptoCurrency gosCoins = _calc.PoolCoins[1];
             Algorithm zergAlgorithm = _calc.PoolAlgorithms[0];
             Algorithm phiAlgorithm = _calc.PoolAlgorithms[1];
+            Algorithm zpoolAlgorithm = _calc.PoolAlgorithms[2];
+            Algorithm ahashAlgorithm = _calc.PoolAlgorithms[3];
+
 
             Console.WriteLine("Analyzing ...");
 
@@ -262,6 +265,45 @@ namespace HeroMiningCLI
                         }
                     }
 
+
+                    if (ahashAlgorithm[algorithmName] != null)
+                    {
+                        _calc.MyHashRate = HashPower.GetAlgorithmHashRate(algorithmName);
+                        double btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.AhashPool, true);
+                        double btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.AhashPool, false);
+
+                        AlgorithmResult algorAtAhash = new AlgorithmResult();
+                        algorAtAhash.name = algorithmName;
+                        algorAtAhash.Pool = PoolName.AhashPool;
+                        algorAtAhash.estimate_current = btcCurrentPerDay;
+                        algorAtAhash.estimate_last24h = btc24HoursPerDay;
+                        algorResult.Add(algorAtAhash);
+
+                        if (_needToShowCoinsNumPerDay)
+                        {
+                            ShowNumOfBtcMiningPerDay(algorithmName, PoolName.AhashPool);
+                        }
+                    }
+
+                    if (zpoolAlgorithm[algorithmName] != null)
+                    {
+                        _calc.MyHashRate = HashPower.GetAlgorithmHashRate(algorithmName);
+                        double btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zpool, true);
+                        double btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zpool, false);
+
+                        AlgorithmResult algorAtZpool = new AlgorithmResult();
+                        algorAtZpool.name = algorithmName;
+                        algorAtZpool.Pool = PoolName.Zpool;
+                        algorAtZpool.estimate_current = btcCurrentPerDay;
+                        algorAtZpool.estimate_last24h = btc24HoursPerDay;
+                        algorResult.Add(algorAtZpool);
+
+                        if (_needToShowCoinsNumPerDay)
+                        {
+                            ShowNumOfBtcMiningPerDay(algorithmName, PoolName.Zpool);
+                        }
+                    }
+
                     algorResult.Sort();
                     foreach (AlgorithmResult algor in algorResult)
                     {
@@ -410,7 +452,6 @@ namespace HeroMiningCLI
 
                     btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.PhiPhi, true);
                     btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.PhiPhi, false);
-
                     AlgorithmResult algorAtPhi = new AlgorithmResult();
                     algorAtPhi.name = algorithmName;
                     algorAtPhi.Pool = PoolName.PhiPhi;
@@ -418,6 +459,23 @@ namespace HeroMiningCLI
                     algorAtPhi.estimate_last24h = btc24HoursPerDay;
                     algorResult.Add(algorAtPhi);
 
+                    btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.AhashPool, true);
+                    btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.AhashPool, false);
+                    AlgorithmResult algorAtAhash = new AlgorithmResult();
+                    algorAtAhash.name = algorithmName;
+                    algorAtAhash.Pool = PoolName.AhashPool;
+                    algorAtAhash.estimate_current = btcCurrentPerDay;
+                    algorAtAhash.estimate_last24h = btc24HoursPerDay;
+                    algorResult.Add(algorAtAhash);
+
+                    btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zpool, true);
+                    btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zpool, false);
+                    AlgorithmResult algorAtZpool = new AlgorithmResult();
+                    algorAtZpool.name = algorithmName;
+                    algorAtZpool.Pool = PoolName.Zpool;
+                    algorAtZpool.estimate_current = btcCurrentPerDay;
+                    algorAtZpool.estimate_last24h = btc24HoursPerDay;
+                    algorResult.Add(algorAtZpool);
 
                 }
 
