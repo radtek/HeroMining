@@ -10,6 +10,7 @@ namespace CryptoMining.ApplicationCore
 {
     public class MiningCalculator
     {
+        private BinanceAPI _bnAPI = new BinanceAPI();
         private CryptoBridgeAPI _cbAPI = new CryptoBridgeAPI();
         private CryptopiaAPI _cpAPI = new CryptopiaAPI();
         private Crex24API _crexAPI = new Crex24API();
@@ -23,6 +24,7 @@ namespace CryptoMining.ApplicationCore
         private List<CryptoBridgeCurrency> _cryptoBridgeCoinsPrice = new List<CryptoBridgeCurrency>();
         private List<Crex24Currency> _crex24CoinsPrice = new List<Crex24Currency>();
         private List<CryptopiaCurrency> _cryptopiaCoinsPrice = new List<CryptopiaCurrency>();
+        private List<BinanceCurrency> _binanceCoinsPrice = new List<BinanceCurrency>();
         private CryptoCurrency _bsodCurrencies = new CryptoCurrency();
         private CryptoCurrency _gosCurrencies = new CryptoCurrency();
         private Algorithm _zergAlgorithm = new Algorithm();
@@ -38,6 +40,18 @@ namespace CryptoMining.ApplicationCore
             try
             {
                 _cryptopiaCoinsPrice = _cpAPI.LoadPrice();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+        }
+
+        private void LoadBinancePrice()
+        {
+            try
+            {
+                _binanceCoinsPrice = _bnAPI.LoadPrice();
             }
             catch (Exception err)
             {
@@ -148,6 +162,7 @@ namespace CryptoMining.ApplicationCore
             Parallel.Invoke(
                 () => LoadCryptopiaPrice(),
                 () => LoadCryptoBridgePrice(),
+                () => LoadBinancePrice(),
                 () => LoadCrex2Price(),
                 () => LoadBsodCurrencies(),
                 () => LoadGosCurrencies(),
@@ -155,7 +170,7 @@ namespace CryptoMining.ApplicationCore
                 () => LoadPhiPhiAlgorithm(),
                 () => LoadZpoolAlgorithm(),
                 () => LoadAhashAlgorithm());
-
+                
             _thaiBahtPerBTC = double.Parse(_bxAPI.LoadThaiBahtBtcPrice().bids[0][0]);
         }
 
@@ -202,6 +217,18 @@ namespace CryptoMining.ApplicationCore
             else if (exchangeName == ExchangeName.Cryptopia)
             {
                 foreach (ExchangeCurrency coin in _cryptopiaCoinsPrice)
+                {
+                    if (coin.symbol == pairSymbol)
+                    {
+                        return GetBidPrice(coin);
+                    }
+                }
+                Debug.WriteLine(string.Format("Can't find price of {0} on {1} exchange.", pairSymbol, exchangeName));
+                return 0;
+            }
+            else if (exchangeName == ExchangeName.Binance)
+            {
+                foreach (ExchangeCurrency coin in _binanceCoinsPrice)
                 {
                     if (coin.symbol == pairSymbol)
                     {

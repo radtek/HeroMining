@@ -169,6 +169,20 @@ namespace HeroMiningCLI
                             coinsResult.Add(coin);
                         }
 
+
+                        bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Binance);
+                        if (bahtPerDay > keepMoreThan)
+                        {
+                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "binance", bahtPerDay));
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Bsod;
+                            coin.algo = bsodCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.Binance;
+                            coinsResult.Add(coin);
+                        }
+
                         if (_needToShowCoinsNumPerDay)
                             ShowNumOfCoinMiningPerDay(symbol, PoolName.Bsod);
                     }
@@ -212,6 +226,19 @@ namespace HeroMiningCLI
                             coin.Pool = PoolName.Gos;
                             coin.algo = gosCoins[symbol].algo;
                             coin.Exchange = ExchangeName.Cryptopia;
+                            coinsResult.Add(coin);
+                        }
+
+                        bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Binance);
+                        if (bahtPerDay > keepMoreThan)
+                        {
+                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "binance", bahtPerDay));
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Gos;
+                            coin.algo = gosCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.Binance;
                             coinsResult.Add(coin);
                         }
 
@@ -369,6 +396,18 @@ namespace HeroMiningCLI
                             coinsResult.Add(coin);
                         }
 
+                        bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Binance);
+                        if (bahtPerDay > keepMoreThan)
+                        {
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Bsod;
+                            coin.algo = bsodCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.Binance;
+                            coinsResult.Add(coin);
+                        }
+
                         if (_needToShowCoinsNumPerDay)
                             ShowNumOfCoinMiningPerDay(symbol, PoolName.Bsod);
                     }
@@ -412,6 +451,18 @@ namespace HeroMiningCLI
                             coinsResult.Add(coin);
                         }
 
+                        bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Binance);
+                        if (bahtPerDay > keepMoreThan)
+                        {
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Gos;
+                            coin.algo = gosCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.Binance;
+                            coinsResult.Add(coin);
+                        }
+
                         if (_needToShowCoinsNumPerDay)
                             ShowNumOfCoinMiningPerDay(symbol, PoolName.Gos);
                     }
@@ -443,39 +494,51 @@ namespace HeroMiningCLI
                     _calc.MyHashRate = HashPower.GetAlgorithmHashRate(algorithmName);
                     double btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zerg, true);
                     double btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zerg, false);
-                    AlgorithmResult algorAtZerg = new AlgorithmResult();
-                    algorAtZerg.name = algorithmName;
-                    algorAtZerg.Pool = PoolName.Zerg;
-                    algorAtZerg.estimate_current = btcCurrentPerDay;
-                    algorAtZerg.estimate_last24h = btc24HoursPerDay;
-                    algorResult.Add(algorAtZerg);
+                    if (btc24HoursPerDay > keepMoreThan || btcCurrentPerDay > keepMoreThan)
+                    {
+                        AlgorithmResult algorAtZerg = new AlgorithmResult();
+                        algorAtZerg.name = algorithmName;
+                        algorAtZerg.Pool = PoolName.Zerg;
+                        algorAtZerg.estimate_current = btcCurrentPerDay;
+                        algorAtZerg.estimate_last24h = btc24HoursPerDay;
+                        algorResult.Add(algorAtZerg);
+                    }
 
                     btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.PhiPhi, true);
                     btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.PhiPhi, false);
-                    AlgorithmResult algorAtPhi = new AlgorithmResult();
-                    algorAtPhi.name = algorithmName;
-                    algorAtPhi.Pool = PoolName.PhiPhi;
-                    algorAtPhi.estimate_current = btcCurrentPerDay;
-                    algorAtPhi.estimate_last24h = btc24HoursPerDay;
-                    algorResult.Add(algorAtPhi);
+                    if (btc24HoursPerDay > keepMoreThan || btcCurrentPerDay > keepMoreThan)
+                    {
+                        AlgorithmResult algorAtPhi = new AlgorithmResult();
+                        algorAtPhi.name = algorithmName;
+                        algorAtPhi.Pool = PoolName.PhiPhi;
+                        algorAtPhi.estimate_current = btcCurrentPerDay;
+                        algorAtPhi.estimate_last24h = btc24HoursPerDay;
+                        algorResult.Add(algorAtPhi);
+                    }
 
                     btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.AhashPool, true);
                     btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.AhashPool, false);
-                    AlgorithmResult algorAtAhash = new AlgorithmResult();
-                    algorAtAhash.name = algorithmName;
-                    algorAtAhash.Pool = PoolName.AhashPool;
-                    algorAtAhash.estimate_current = btcCurrentPerDay;
-                    algorAtAhash.estimate_last24h = btc24HoursPerDay;
-                    algorResult.Add(algorAtAhash);
+                    if (btc24HoursPerDay > keepMoreThan || btcCurrentPerDay > keepMoreThan)
+                    {
+                        AlgorithmResult algorAtAhash = new AlgorithmResult();
+                        algorAtAhash.name = algorithmName;
+                        algorAtAhash.Pool = PoolName.AhashPool;
+                        algorAtAhash.estimate_current = btcCurrentPerDay;
+                        algorAtAhash.estimate_last24h = btc24HoursPerDay;
+                        algorResult.Add(algorAtAhash);
+                    }
 
                     btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zpool, true);
                     btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zpool, false);
-                    AlgorithmResult algorAtZpool = new AlgorithmResult();
-                    algorAtZpool.name = algorithmName;
-                    algorAtZpool.Pool = PoolName.Zpool;
-                    algorAtZpool.estimate_current = btcCurrentPerDay;
-                    algorAtZpool.estimate_last24h = btc24HoursPerDay;
-                    algorResult.Add(algorAtZpool);
+                    if (btc24HoursPerDay > keepMoreThan || btcCurrentPerDay > keepMoreThan)
+                    {
+                        AlgorithmResult algorAtZpool = new AlgorithmResult();
+                        algorAtZpool.name = algorithmName;
+                        algorAtZpool.Pool = PoolName.Zpool;
+                        algorAtZpool.estimate_current = btcCurrentPerDay;
+                        algorAtZpool.estimate_last24h = btc24HoursPerDay;
+                        algorResult.Add(algorAtZpool);
+                    }
 
                 }
 

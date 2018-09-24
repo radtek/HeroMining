@@ -57,5 +57,18 @@ namespace CryptoMiningTest
             }
             Assert.AreEqual(true, coins.Count > 0);
         }
+
+
+        [TestMethod]
+        public void TestLoadCurrencyFromBinance()
+        {
+            BinanceAPI api = new BinanceAPI();
+            List<BinanceCurrency> coins = api.LoadPrice();
+            foreach (ExchangeCurrency coin in coins)
+            {
+                Debug.WriteLine(string.Format("{0} bid={1} ask={2} last={3} volume={4} ", coin.symbol, coin.bid, coin.ask, coin.last, coin.volume));
+            }
+            Assert.AreEqual(true, coins.Count > 0);
+        }
     }
 }
