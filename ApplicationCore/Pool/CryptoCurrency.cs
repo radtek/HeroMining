@@ -1633,7 +1633,6 @@ namespace CryptoMining.ApplicationCore.Pool
         [JsonProperty("ARGLyra2v2")]
         public ARGLyra2v2 Arglyra2v2 { get; set; }
 
-
         [JsonProperty("ARGMyrGr")]
         public ARGMyrGr ArgmyrGr { get; set; }
 
@@ -1658,12 +1657,11 @@ namespace CryptoMining.ApplicationCore.Pool
         [JsonProperty("BTB")]
         public BTB Btb { get; set; }
 
-
         [JsonProperty("BTCP")]
         public BTCP Btcp { get; set; }
 
         [JsonProperty("BTCZ")]
-        public BTCP Btcz { get; set; }
+        public BTCZ Btcz { get; set; }
 
         [JsonProperty("BTCS")]
         public BTCS Btcs { get; set; }
@@ -1769,7 +1767,6 @@ namespace CryptoMining.ApplicationCore.Pool
 
         [JsonProperty("DUDG")]
         public DUDG Dudg { get; set; }
-
 
         [JsonProperty("ELI")]
         public ELI Eli { get; set; }
@@ -2533,8 +2530,6 @@ namespace CryptoMining.ApplicationCore.Pool
         [JsonProperty("VTC")]
         public VTC Vtc { get; set; }
 
-
-
         [JsonProperty("XZX")]
         public XZX Xzx { get; set; }
 
@@ -2567,7 +2562,7 @@ namespace CryptoMining.ApplicationCore.Pool
                         return Bhd;
                     case "BNX":
                         return Bnx;
-                    case "BCFK":
+                    case "BCF":
                         return Bcf;
                     case "BOLI":
                         return Boli;
@@ -2674,7 +2669,7 @@ namespace CryptoMining.ApplicationCore.Pool
                     case "WSX":
                         return Wsx;
                     case "XCG":
-                        return Wsx;
+                        return Xcg;
                     case "XAR":
                         return Xar;
                     case "XZX":

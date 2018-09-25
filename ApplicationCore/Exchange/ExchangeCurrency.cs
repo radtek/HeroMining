@@ -8,6 +8,9 @@ namespace CryptoMining.ApplicationCore.Exchange
     {
         private string _symbol;
 
+        /// <summary>
+        /// format XXX-BTC
+        /// </summary>
         public string symbol
         {
             get { return _symbol; }

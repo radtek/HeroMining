@@ -17,20 +17,13 @@ namespace HeroMiningCLI
         private static string _filename = "";
         private static MiningCalculator _calc = null;
         private static bool _needToShowCoinsNumPerDay = false;
+        private static int _keepMoreThan = -1;
+        private static bool _needMonitor = false;
+        private static string _monitorCoin = "";
 
-        static void Main(string[] args)
+
+        static void ParseArgument(string[] args)
         {
-            BsodAPI bsod = new BsodAPI();
-            GosAPI gos = new GosAPI();
-            List<CryptoCurrencyResult> coinsResult = new List<CryptoCurrencyResult>();
-            List<AlgorithmResult> algorResult = new List<AlgorithmResult>();
-
-            Console.CancelKeyPress += Console_CancelKeyPress;
-            bool needMonitor = false;
-            string monitorCoin = "";
-            int keepMoreThan = -1;
-
-
             if (args.Length > 0)
             {
                 for (int i = 0; i < args.Length; i++)
@@ -56,7 +49,7 @@ namespace HeroMiningCLI
                         try
                         {
                             _needWriteFile = true;
-                            keepMoreThan = int.Parse(args[i + 1]);
+                            _keepMoreThan = int.Parse(args[i + 1]);
                         }
                         catch (IndexOutOfRangeException)
                         {
@@ -76,11 +69,11 @@ namespace HeroMiningCLI
                     }
                     else if (args[i] == "-m")
                     {
-                        needMonitor = true;
+                        _needMonitor = true;
                         try
                         {
-                            monitorCoin = args[i + 1];
-                            monitorCoin = monitorCoin.ToUpper();
+                            _monitorCoin = args[i + 1];
+                            _monitorCoin = _monitorCoin.ToUpper();
                         }
                         catch (IndexOutOfRangeException)
                         {
@@ -96,6 +89,18 @@ namespace HeroMiningCLI
             }
 
 
+        }
+
+        static void Main(string[] args)
+        {
+            Console.CancelKeyPress += Console_CancelKeyPress;
+            BsodAPI bsod = new BsodAPI();
+            GosAPI gos = new GosAPI();
+            List<CryptoCurrencyResult> coinsResult = new List<CryptoCurrencyResult>();
+            List<AlgorithmResult> algorResult = new List<AlgorithmResult>();
+
+            ParseArgument(args);
+         
 
             Rig myRig = ReadRigConfig("myrig.json");
 
@@ -113,25 +118,25 @@ namespace HeroMiningCLI
 
             Console.WriteLine("Analyzing ...");
 
-            if (needMonitor)
+            if (_needMonitor) // monitor mode
             {
                 foreach (GpuInfo gpu in myRig.Chipsets)
                 {
                     Console.WriteLine(string.Format("{0} x {1} ", gpu.Name, gpu.Count));
                 }
-                string algorithmName = monitorCoin.ToLower();
+                string algorithmName = _monitorCoin.ToLower();
 
-                Console.WriteLine("Monitoring " + zergAlgorithm[algorithmName] != null ? algorithmName : monitorCoin);
+                Console.WriteLine("Monitoring " + zergAlgorithm[algorithmName] != null ? algorithmName : _monitorCoin);
                 Console.WriteLine();
                 string input = "";
-                string symbol = monitorCoin;
+                string symbol = _monitorCoin;
                 while (input != Environment.NewLine && input != "q")
                 {
                     coinsResult.Clear();
                     if (bsodCoins != null && bsodCoins[symbol] != null)
                     {
                         double bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.CryptoBridge);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "crypto-bridge", bahtPerDay));
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
@@ -144,7 +149,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Crex24);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "crex24", bahtPerDay));
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
@@ -157,7 +162,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Cryptopia);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "cryptopia", bahtPerDay));
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
@@ -171,7 +176,7 @@ namespace HeroMiningCLI
 
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Binance);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "binance", bahtPerDay));
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
@@ -183,6 +188,19 @@ namespace HeroMiningCLI
                             coinsResult.Add(coin);
                         }
 
+                        bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.CoinExchange);
+                        if (bahtPerDay > _keepMoreThan)
+                        {
+                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "coinexchange", bahtPerDay));
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Bsod;
+                            coin.algo = bsodCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.CoinExchange;
+                            coinsResult.Add(coin);
+                        }
+
                         if (_needToShowCoinsNumPerDay)
                             ShowNumOfCoinMiningPerDay(symbol, PoolName.Bsod);
                     }
@@ -191,7 +209,7 @@ namespace HeroMiningCLI
                     {
 
                         double bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.CryptoBridge);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "crypto-bridge", bahtPerDay));
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
@@ -204,7 +222,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Crex24);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "crex24", bahtPerDay));
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
@@ -217,7 +235,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Cryptopia);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "cryptopia", bahtPerDay));
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
@@ -230,7 +248,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Binance);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "binance", bahtPerDay));
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
@@ -239,6 +257,19 @@ namespace HeroMiningCLI
                             coin.Pool = PoolName.Gos;
                             coin.algo = gosCoins[symbol].algo;
                             coin.Exchange = ExchangeName.Binance;
+                            coinsResult.Add(coin);
+                        }
+
+                        bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.CoinExchange);
+                        if (bahtPerDay > _keepMoreThan)
+                        {
+                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "coinexchange", bahtPerDay));
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Gos;
+                            coin.algo = gosCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.CoinExchange;
                             coinsResult.Add(coin);
                         }
 
@@ -361,7 +392,7 @@ namespace HeroMiningCLI
                     if (bsodCoins != null && bsodCoins[symbol] != null)
                     {
                         double bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.CryptoBridge);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
                             coin.symbol = symbol;
@@ -373,7 +404,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Crex24);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
                             coin.symbol = symbol;
@@ -385,7 +416,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Cryptopia);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
                             coin.symbol = symbol;
@@ -397,7 +428,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Binance);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
                             coin.symbol = symbol;
@@ -405,6 +436,18 @@ namespace HeroMiningCLI
                             coin.Pool = PoolName.Bsod;
                             coin.algo = bsodCoins[symbol].algo;
                             coin.Exchange = ExchangeName.Binance;
+                            coinsResult.Add(coin);
+                        }
+
+                        bahtPerDay = GetMiningBahtPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.CoinExchange);
+                        if (bahtPerDay > _keepMoreThan)
+                        {
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Bsod;
+                            coin.algo = bsodCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.CoinExchange;
                             coinsResult.Add(coin);
                         }
 
@@ -416,7 +459,7 @@ namespace HeroMiningCLI
                     {
 
                         double bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.CryptoBridge);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
                             coin.symbol = symbol;
@@ -428,7 +471,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Crex24);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
                             coin.symbol = symbol;
@@ -440,7 +483,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Cryptopia);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
                             coin.symbol = symbol;
@@ -452,7 +495,7 @@ namespace HeroMiningCLI
                         }
 
                         bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Binance);
-                        if (bahtPerDay > keepMoreThan)
+                        if (bahtPerDay > _keepMoreThan)
                         {
                             CryptoCurrencyResult coin = new CryptoCurrencyResult();
                             coin.symbol = symbol;
@@ -460,6 +503,18 @@ namespace HeroMiningCLI
                             coin.Pool = PoolName.Gos;
                             coin.algo = gosCoins[symbol].algo;
                             coin.Exchange = ExchangeName.Binance;
+                            coinsResult.Add(coin);
+                        }
+
+                        bahtPerDay = GetMiningBahtPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.CoinExchange);
+                        if (bahtPerDay > _keepMoreThan)
+                        {
+                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                            coin.symbol = symbol;
+                            coin.h24_btc = bahtPerDay;
+                            coin.Pool = PoolName.Gos;
+                            coin.algo = gosCoins[symbol].algo;
+                            coin.Exchange = ExchangeName.CoinExchange;
                             coinsResult.Add(coin);
                         }
 
@@ -494,7 +549,7 @@ namespace HeroMiningCLI
                     _calc.MyHashRate = HashPower.GetAlgorithmHashRate(algorithmName);
                     double btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zerg, true);
                     double btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zerg, false);
-                    if (btc24HoursPerDay > keepMoreThan || btcCurrentPerDay > keepMoreThan)
+                    if (btc24HoursPerDay > _keepMoreThan || btcCurrentPerDay > _keepMoreThan)
                     {
                         AlgorithmResult algorAtZerg = new AlgorithmResult();
                         algorAtZerg.name = algorithmName;
@@ -506,7 +561,7 @@ namespace HeroMiningCLI
 
                     btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.PhiPhi, true);
                     btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.PhiPhi, false);
-                    if (btc24HoursPerDay > keepMoreThan || btcCurrentPerDay > keepMoreThan)
+                    if (btc24HoursPerDay > _keepMoreThan || btcCurrentPerDay > _keepMoreThan)
                     {
                         AlgorithmResult algorAtPhi = new AlgorithmResult();
                         algorAtPhi.name = algorithmName;
@@ -518,7 +573,7 @@ namespace HeroMiningCLI
 
                     btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.AhashPool, true);
                     btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.AhashPool, false);
-                    if (btc24HoursPerDay > keepMoreThan || btcCurrentPerDay > keepMoreThan)
+                    if (btc24HoursPerDay > _keepMoreThan || btcCurrentPerDay > _keepMoreThan)
                     {
                         AlgorithmResult algorAtAhash = new AlgorithmResult();
                         algorAtAhash.name = algorithmName;
@@ -530,7 +585,7 @@ namespace HeroMiningCLI
 
                     btcCurrentPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zpool, true);
                     btc24HoursPerDay = _calc.GetTotalBahtMiningPerday(algorithmName, PoolName.Zpool, false);
-                    if (btc24HoursPerDay > keepMoreThan || btcCurrentPerDay > keepMoreThan)
+                    if (btc24HoursPerDay > _keepMoreThan || btcCurrentPerDay > _keepMoreThan)
                     {
                         AlgorithmResult algorAtZpool = new AlgorithmResult();
                         algorAtZpool.name = algorithmName;
@@ -548,7 +603,6 @@ namespace HeroMiningCLI
                     string line = string.Format("{0} baht(24hr)  \t{1} baht(current) \t{2}@{3}", algor.estimate_last24h.ToString("N2"), algor.estimate_current.ToString("N2"), algor.name, algor.Pool);
                     Console.WriteLine(line);
                     _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", algor.name, algor.Pool, "bx", algor.estimate_last24h.ToString("F2"), algor.estimate_current.ToString("F2")));
-
                 }
 
 

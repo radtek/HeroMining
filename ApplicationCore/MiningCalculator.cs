@@ -12,6 +12,7 @@ namespace CryptoMining.ApplicationCore
     {
         private BinanceAPI _bnAPI = new BinanceAPI();
         private CryptoBridgeAPI _cbAPI = new CryptoBridgeAPI();
+        private CoinExchangeAPI _ceAPI = new CoinExchangeAPI();
         private CryptopiaAPI _cpAPI = new CryptopiaAPI();
         private Crex24API _crexAPI = new Crex24API();
         private BsodAPI _bsodAPI = new BsodAPI();
@@ -25,6 +26,7 @@ namespace CryptoMining.ApplicationCore
         private List<Crex24Currency> _crex24CoinsPrice = new List<Crex24Currency>();
         private List<CryptopiaCurrency> _cryptopiaCoinsPrice = new List<CryptopiaCurrency>();
         private List<BinanceCurrency> _binanceCoinsPrice = new List<BinanceCurrency>();
+        private List<CoinExchangeCurrency> _coinExchangeCoinsPrice = new List<CoinExchangeCurrency>();
         private CryptoCurrency _bsodCurrencies = new CryptoCurrency();
         private CryptoCurrency _gosCurrencies = new CryptoCurrency();
         private Algorithm _zergAlgorithm = new Algorithm();
@@ -64,6 +66,18 @@ namespace CryptoMining.ApplicationCore
             try
             {
                 _cryptoBridgeCoinsPrice = _cbAPI.LoadPrice();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+        }
+
+        private void LoadCoinExchangePrice()
+        {
+            try
+            {
+                _coinExchangeCoinsPrice = _ceAPI.LoadPrice();
             }
             catch (Exception err)
             {
@@ -160,6 +174,7 @@ namespace CryptoMining.ApplicationCore
         {
             MyHashRate = -1;
             Parallel.Invoke(
+                () => LoadCoinExchangePrice(),
                 () => LoadCryptopiaPrice(),
                 () => LoadCryptoBridgePrice(),
                 () => LoadBinancePrice(),
@@ -229,6 +244,18 @@ namespace CryptoMining.ApplicationCore
             else if (exchangeName == ExchangeName.Binance)
             {
                 foreach (ExchangeCurrency coin in _binanceCoinsPrice)
+                {
+                    if (coin.symbol == pairSymbol)
+                    {
+                        return GetBidPrice(coin);
+                    }
+                }
+                Debug.WriteLine(string.Format("Can't find price of {0} on {1} exchange.", pairSymbol, exchangeName));
+                return 0;
+            }
+            else if (exchangeName == ExchangeName.CoinExchange)
+            {
+                foreach (ExchangeCurrency coin in _coinExchangeCoinsPrice)
                 {
                     if (coin.symbol == pairSymbol)
                     {
