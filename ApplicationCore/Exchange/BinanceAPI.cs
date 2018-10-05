@@ -10,6 +10,7 @@ namespace CryptoMining.ApplicationCore.Exchange
 {
     public class BinanceAPI
     {
+        private double _usdPerBTC = 0.0d;
         public List<BinanceCurrency> LoadPrice()
         {
             try
@@ -27,6 +28,13 @@ namespace CryptoMining.ApplicationCore.Exchange
                         Task<string> result = content.ReadAsStringAsync();
                         res = result.Result;
                         List<BinanceCurrency> priceList = JsonConvert.DeserializeObject<List<BinanceCurrency>>(res);
+                        foreach (ExchangeCurrency coin in priceList)
+                        {
+                            if (coin.symbol == "BTCUSDT")
+                            {
+                                _usdPerBTC = (coin.bid ?? 0);
+                            }
+                        }
                         return priceList;
                     }
                 }
@@ -35,6 +43,12 @@ namespace CryptoMining.ApplicationCore.Exchange
             {
                 throw new Exception("Can't load coin price from Binance exchange.", err);
             }
+        }
+
+
+        public double GetUsdPerBTCPrice()
+        {
+           return _usdPerBTC;
         }
     }
 }

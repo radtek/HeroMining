@@ -22,7 +22,7 @@ namespace CryptoMining.ApplicationCore.Pool
                 using (var client = new System.Net.Http.HttpClient())
                 {
                     // HTTP POST
-                    client.BaseAddress = new Uri("http://pool1.phi-phi-pool.net");
+                    client.BaseAddress = new Uri("http://pool1.phi-phi-pool.com");
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                     var response = client.GetAsync("/api/status").Result;
                     string res = "";

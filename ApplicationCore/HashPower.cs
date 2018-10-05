@@ -16,7 +16,7 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1080ti_equihash", new HashPowerInfo(635, "Sol/s", 190));
             _hardwarePower.Add("1080ti_equihash192", new HashPowerInfo(30, "Sol/s", 180));
             _hardwarePower.Add("1080ti_zhash", new HashPowerInfo(57, "Sol/s", 180));
-            _hardwarePower.Add("1080ti_ethash", new HashPowerInfo(35000000, "H/s", 140));
+            _hardwarePower.Add("1080ti_ethash", new HashPowerInfo(50000000, "H/s", 175));
             _hardwarePower.Add("1080ti_skein", new HashPowerInfo(863500000, "H/s", 217));
             _hardwarePower.Add("1080ti_neoscrypt", new HashPowerInfo(1400000, "H/s", 210));
             _hardwarePower.Add("1080ti_xevan", new HashPowerInfo(5000000, "H/s", 200));
@@ -36,6 +36,15 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1080ti_hex", new HashPowerInfo(13000000, "H/s", 200));
             _hardwarePower.Add("1080ti_progpow", new HashPowerInfo(21000000, "H/s", 210));
             _hardwarePower.Add("1080ti_cnheavy", new HashPowerInfo(990, "H/s", 150));
+            _hardwarePower.Add("1080ti_scrypt", new HashPowerInfo(776000, "H/s", 208));
+            _hardwarePower.Add("1080ti_allium", new HashPowerInfo(5600000, "H/s", 168));
+            _hardwarePower.Add("1080ti_cryptonight", new HashPowerInfo(830, "H/s", 140));
+            _hardwarePower.Add("1080ti_cryptonightv7", new HashPowerInfo(830, "H/s", 140));
+            _hardwarePower.Add("1080ti_hmq1725", new HashPowerInfo(6900000, "H/s", 189));
+            _hardwarePower.Add("1080ti_tensority", new HashPowerInfo(1680, "H/s", 175));
+
+
+
 
 
             _hardwarePower.Add("1070ti_equihash", new HashPowerInfo(500, "Sol/s", 105));
@@ -61,6 +70,13 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1070ti_hex", new HashPowerInfo(12000000, "H/s", 170));
             _hardwarePower.Add("1070ti_progpow", new HashPowerInfo(14300000, "H/s", 140));
             _hardwarePower.Add("1070ti_cnheavy", new HashPowerInfo(830, "H/s", 100));
+            _hardwarePower.Add("1070ti_scrypt", new HashPowerInfo(645000, "H/s", 141));
+            _hardwarePower.Add("1070ti_allium", new HashPowerInfo(3860000, "H/s", 111));
+            _hardwarePower.Add("1070ti_cryptonight", new HashPowerInfo(630, "H/s", 140));
+            _hardwarePower.Add("1070ti_cryptonightv7", new HashPowerInfo(630, "H/s", 140));
+            _hardwarePower.Add("1070ti_hmq1725", new HashPowerInfo(4800000, "H/s", 123));
+            _hardwarePower.Add("1070ti_tensority", new HashPowerInfo(1140, "H/s", 160));
+
 
             _hardwarePower.Add("1070_equihash", new HashPowerInfo(430, "Sol/s", 120));
             _hardwarePower.Add("1070_equihash192", new HashPowerInfo(20, "Sol/s", 150));
@@ -85,6 +101,13 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1070_hex", new HashPowerInfo(8000000, "H/s", 120));
             _hardwarePower.Add("1070_progpow", new HashPowerInfo(12200000, "H/s", 130));
             _hardwarePower.Add("1070_cnheavy", new HashPowerInfo(800, "H/s", 100));
+            _hardwarePower.Add("1070_scrypt", new HashPowerInfo(584000, "H/s", 96));
+            _hardwarePower.Add("1070_allium", new HashPowerInfo(3060000, "H/s", 100));
+            _hardwarePower.Add("1070_cryptonight", new HashPowerInfo(630, "H/s", 100));
+            _hardwarePower.Add("1070_cryptonightv7", new HashPowerInfo(630, "H/s", 100));
+            _hardwarePower.Add("1070_hmq1725", new HashPowerInfo(4260000, "H/s", 118));
+            _hardwarePower.Add("1070_tensority", new HashPowerInfo(880, "H/s", 150));
+
 
             _hardwarePower.Add("1060_6GB_equihash", new HashPowerInfo(320, "Sol/s", 110));
             _hardwarePower.Add("1060_6GB_equihash192", new HashPowerInfo(12, "Sol/s", 100));
@@ -109,7 +132,14 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1060_6GB_hex", new HashPowerInfo(6100000, "H/s", 70));
             _hardwarePower.Add("1060_6GB_progpow", new HashPowerInfo(8500000, "H/s", 95));
             _hardwarePower.Add("1060_6GB_cnheavy", new HashPowerInfo(500, "H/s", 70));
+            _hardwarePower.Add("1060_6GB_scrypt", new HashPowerInfo(515000, "H/s", 86));
+            _hardwarePower.Add("1060_6GB_allium", new HashPowerInfo(2475000, "H/s", 58));
+            _hardwarePower.Add("1060_6GB_cryptonight", new HashPowerInfo(430, "H/s", 70));
+            _hardwarePower.Add("1060_6GB_cryptonightv7", new HashPowerInfo(430, "H/s", 70));
+            _hardwarePower.Add("1060_6GB_hmq1725", new HashPowerInfo(3100000, "H/s", 99));
+            _hardwarePower.Add("1060_6GB_tensority", new HashPowerInfo(630, "H/s", 140));
 
+            
             _hardwarePower.Add("1060_3GB_equihash", new HashPowerInfo(270, "Sol/s", 90));
             _hardwarePower.Add("1060_3GB_equihash192", new HashPowerInfo(9, "Sol/s", 90));
             _hardwarePower.Add("1060_3GB_zhash", new HashPowerInfo(20, "Sol/s", 90));
@@ -133,6 +163,10 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1060_3GB_hex", new HashPowerInfo(5100000, "H/s", 70));
             _hardwarePower.Add("1060_3GB_progpow", new HashPowerInfo(8500000, "H/s", 95));
             _hardwarePower.Add("1060_3GB_cnheavy", new HashPowerInfo(500, "H/s", 70));
+            _hardwarePower.Add("1060_3GB_scrypt", new HashPowerInfo(403000, "H/s", 86));
+            _hardwarePower.Add("1060_3GB_allium", new HashPowerInfo(1868000, "H/s", 90));
+            _hardwarePower.Add("1060_3GB_hmq1725", new HashPowerInfo(2700000, "H/s", 93));
+            _hardwarePower.Add("1060_3GB_tensority", new HashPowerInfo(590, "H/s", 130));
 
 
             _hardwarePower.Add("1050ti_equihash", new HashPowerInfo(140, "Sol/s", 65));
@@ -158,27 +192,52 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("1050ti_hex", new HashPowerInfo(2500000, "H/s", 70));
             _hardwarePower.Add("1050ti_progpow", new HashPowerInfo(5200000, "H/s", 70));
             _hardwarePower.Add("1050ti_cnheavy", new HashPowerInfo(370, "H/s", 50));
+            _hardwarePower.Add("1050ti_scrypt", new HashPowerInfo(298000, "H/s", 63));
+            _hardwarePower.Add("1050ti_allium", new HashPowerInfo(1165000, "H/s", 58));
+            _hardwarePower.Add("1050ti_cryptonight", new HashPowerInfo(300, "H/s", 50));
+            _hardwarePower.Add("1050ti_cryptonightv7", new HashPowerInfo(300, "H/s", 50));
+            _hardwarePower.Add("1050ti_hmq1725", new HashPowerInfo(1700000, "H/s", 62));
+            _hardwarePower.Add("1050ti_tensority", new HashPowerInfo(375, "H/s", 100));
 
 
-            _hardwarePower.Add("rx_vega_64_equihash", new HashPowerInfo(482, "Sol/s", 410));
-            _hardwarePower.Add("rx_vega_64_ethash", new HashPowerInfo(40, "H/s", 230));
-            _hardwarePower.Add("rx_vega_64_neoscrypt", new HashPowerInfo(2200000, "H/s", 400));
+            _hardwarePower.Add("rx_vega_64_equihash", new HashPowerInfo(450, "Sol/s", 200));
+            _hardwarePower.Add("rx_vega_64_ethash", new HashPowerInfo(40000000, "H/s", 230));
             _hardwarePower.Add("rx_vega_64_x16s", new HashPowerInfo(10000000, "H/s", 194));
             _hardwarePower.Add("rx_vega_64_x16r", new HashPowerInfo(13000000, "H/s", 225));
             _hardwarePower.Add("rx_vega_64_x17", new HashPowerInfo(12000000, "H/s", 200));
             _hardwarePower.Add("rx_vega_64_progpow", new HashPowerInfo(17000000, "H/s", 190));
             _hardwarePower.Add("rx_vega_64_cnheavy", new HashPowerInfo(1600, "H/s", 160));
+            _hardwarePower.Add("rx_vega_64_neoscrypt", new HashPowerInfo(2000000, "H/s", 250));
+            _hardwarePower.Add("rx_vega_64_lyra2v2", new HashPowerInfo(13000000, "H/s", 200));
+            _hardwarePower.Add("rx_vega_64_timetravel10", new HashPowerInfo(16500000, "H/s", 230));
+            _hardwarePower.Add("rx_vega_64_lyra2z", new HashPowerInfo(7070000, "H/s", 150));
+            _hardwarePower.Add("rx_vega_64_skunkhash", new HashPowerInfo(40000000, "H/s", 230));
+            _hardwarePower.Add("rx_vega_64_cryptonight", new HashPowerInfo(2050, "H/s", 200));
+            _hardwarePower.Add("rx_vega_64_cryptonightv7", new HashPowerInfo(2050, "H/s", 200));
+
+
+
+
+
 
             _hardwarePower.Add("rx_vega_56_equihash", new HashPowerInfo(460, "Sol/s", 314));
-            _hardwarePower.Add("rx_vega_56_ethash", new HashPowerInfo(36.5, "H/s", 210));
+            _hardwarePower.Add("rx_vega_56_ethash", new HashPowerInfo(36500000, "H/s", 210));
             _hardwarePower.Add("rx_vega_56_x16s", new HashPowerInfo(11000000, "H/s", 175));
             _hardwarePower.Add("rx_vega_56_x16r", new HashPowerInfo(11000000, "H/s", 175));
             _hardwarePower.Add("rx_vega_56_x17", new HashPowerInfo(11000000, "H/s", 180));
             _hardwarePower.Add("rx_vega_56_progpow", new HashPowerInfo(15000000, "H/s", 190));
             _hardwarePower.Add("rx_vega_56_cnheavy", new HashPowerInfo(1400, "H/s", 160));
+            _hardwarePower.Add("rx_vega_56_neoscrypt", new HashPowerInfo(1600000, "H/s", 230));
+            _hardwarePower.Add("rx_vega_56_lyra2v2", new HashPowerInfo(13000000, "H/s", 190));
+            _hardwarePower.Add("rx_vega_56_timetravel10", new HashPowerInfo(14000000, "H/s", 210));
+            _hardwarePower.Add("rx_vega_56_lyra2z", new HashPowerInfo(6000000, "H/s", 150));
+            _hardwarePower.Add("rx_vega_56_skunkhash", new HashPowerInfo(36000000, "H/s", 210));
+            _hardwarePower.Add("rx_vega_56_cryptonight", new HashPowerInfo(1850, "H/s", 190));
+            _hardwarePower.Add("rx_vega_56_cryptonightv7", new HashPowerInfo(1850, "H/s", 190));
+
 
             _hardwarePower.Add("rx_580_equihash", new HashPowerInfo(310, "Sol/s", 230));
-            _hardwarePower.Add("rx_580_ethash", new HashPowerInfo(30.2, "H/s", 135));
+            _hardwarePower.Add("rx_580_ethash", new HashPowerInfo(30200000, "H/s", 135));
             _hardwarePower.Add("rx_580_neoscrypt", new HashPowerInfo(1000000, "H/s", 150));
             _hardwarePower.Add("rx_580_phi1612", new HashPowerInfo(15000000, "H/s", 150));
             _hardwarePower.Add("rx_580_blake2s", new HashPowerInfo(1500000000, "H/s", 150));
@@ -187,11 +246,18 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("rx_580_x17", new HashPowerInfo(6500000, "H/s", 137));
             _hardwarePower.Add("rx_580_progpow", new HashPowerInfo(9600000, "H/s", 140));
             _hardwarePower.Add("rx_580_cnheavy", new HashPowerInfo(900, "H/s", 105));
+            _hardwarePower.Add("rx_580_lyra2v2", new HashPowerInfo(5700000, "H/s", 120));
+            _hardwarePower.Add("rx_580_timetravel10", new HashPowerInfo(8200000, "H/s", 130));
+            _hardwarePower.Add("rx_580_lyra2z", new HashPowerInfo(3200000, "H/s", 120));
+            _hardwarePower.Add("rx_580_skunkhash", new HashPowerInfo(18500000, "H/s", 115));
+            _hardwarePower.Add("rx_580_cryptonight", new HashPowerInfo(690, "H/s", 115));
+            _hardwarePower.Add("rx_580_cryptonightv7", new HashPowerInfo(690, "H/s", 115));
+
 
             _hardwarePower.Add("rx_570_equihash", new HashPowerInfo(290, "Sol/s", 120));
-            _hardwarePower.Add("rx_570_ethash", new HashPowerInfo(27.9, "H/s", 120));
+            _hardwarePower.Add("rx_570_ethash", new HashPowerInfo(27900000, "H/s", 120));
             _hardwarePower.Add("rx_570_neoscrypt", new HashPowerInfo(490000, "H/s", 150));
-            _hardwarePower.Add("rx_570_skunkhash", new HashPowerInfo(18500000, "H/s", 115));
+            _hardwarePower.Add("rx_570_skunkhash", new HashPowerInfo(16300000, "H/s", 110));
             _hardwarePower.Add("rx_570_phi1612", new HashPowerInfo(10000000, "H/s", 150));
             _hardwarePower.Add("rx_570_blake2s", new HashPowerInfo(1200000000, "H/s", 150));
             _hardwarePower.Add("rx_570_x16s", new HashPowerInfo(4520000, "H/s", 97));
@@ -199,6 +265,45 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("rx_570_x17", new HashPowerInfo(4200000, "H/s", 102));
             _hardwarePower.Add("rx_570_progpow", new HashPowerInfo(8100000, "H/s", 120));
             _hardwarePower.Add("rx_570_cnheavy", new HashPowerInfo(750, "H/s", 100));
+            _hardwarePower.Add("rx_570_lyra2v2", new HashPowerInfo(5500000, "H/s", 110));
+            _hardwarePower.Add("rx_570_timetravel10", new HashPowerInfo(8000000, "H/s", 115));
+            _hardwarePower.Add("rx_570_lyra2z", new HashPowerInfo(3000000, "H/s", 120));
+            _hardwarePower.Add("rx_570_cryptonight", new HashPowerInfo(700, "H/s", 110));
+            _hardwarePower.Add("rx_570_cryptonightv7", new HashPowerInfo(700, "H/s", 110));
+
+            _hardwarePower.Add("rx_480_equihash", new HashPowerInfo(290, "Sol/s", 120));
+            _hardwarePower.Add("rx_480_ethash", new HashPowerInfo(29500000, "H/s", 135));
+            _hardwarePower.Add("rx_480_neoscrypt", new HashPowerInfo(650000, "H/s", 150));
+            _hardwarePower.Add("rx_480_skunkhash", new HashPowerInfo(18000000, "H/s", 115));
+            _hardwarePower.Add("rx_480_phi1612", new HashPowerInfo(15000000, "H/s", 150));
+            _hardwarePower.Add("rx_480_blake2s", new HashPowerInfo(1400000000, "H/s", 150));
+            _hardwarePower.Add("rx_480_x16s", new HashPowerInfo(7000000, "H/s", 125));
+            _hardwarePower.Add("rx_480_x16r", new HashPowerInfo(7000000, "H/s", 125));
+            _hardwarePower.Add("rx_480_x17", new HashPowerInfo(4200000, "H/s", 102));
+            _hardwarePower.Add("rx_480_progpow", new HashPowerInfo(9600000, "H/s", 140));
+            _hardwarePower.Add("rx_480_cnheavy", new HashPowerInfo(900, "H/s", 105));
+            _hardwarePower.Add("rx_480_lyra2v2", new HashPowerInfo(4900000, "H/s", 130));
+            _hardwarePower.Add("rx_480_timetravel10", new HashPowerInfo(11000000, "H/s", 110));
+            _hardwarePower.Add("rx_480_lyra2z", new HashPowerInfo(220000, "H/s", 100));
+            _hardwarePower.Add("rx_480_cryptonight", new HashPowerInfo(730, "H/s", 110));
+            _hardwarePower.Add("rx_480_cryptonightv7", new HashPowerInfo(730, "H/s", 110));
+
+            _hardwarePower.Add("rx_470_equihash", new HashPowerInfo(260, "Sol/s", 110));
+            _hardwarePower.Add("rx_470_ethash", new HashPowerInfo(26000000, "H/s", 120));
+            _hardwarePower.Add("rx_470_neoscrypt", new HashPowerInfo(600000, "H/s", 140));
+            _hardwarePower.Add("rx_470_skunkhash", new HashPowerInfo(15000000, "H/s", 105));
+            _hardwarePower.Add("rx_470_phi1612", new HashPowerInfo(10000000, "H/s", 150));
+            _hardwarePower.Add("rx_470_blake2s", new HashPowerInfo(1200000000, "H/s", 150));
+            _hardwarePower.Add("rx_470_x16s", new HashPowerInfo(4790000, "H/s", 87));
+            _hardwarePower.Add("rx_470_x16r", new HashPowerInfo(4790000, "H/s", 87));
+            _hardwarePower.Add("rx_470_x17", new HashPowerInfo(4570000, "H/s", 80));
+            _hardwarePower.Add("rx_470_progpow", new HashPowerInfo(8100000, "H/s", 120));
+            _hardwarePower.Add("rx_470_cnheavy", new HashPowerInfo(750, "H/s", 100));
+            _hardwarePower.Add("rx_470_lyra2v2", new HashPowerInfo(4400000, "H/s", 120));
+            _hardwarePower.Add("rx_470_timetravel10", new HashPowerInfo(7500000, "H/s", 120));
+            _hardwarePower.Add("rx_470_lyra2z", new HashPowerInfo(70000, "H/s", 100));
+            _hardwarePower.Add("rx_470_cryptonight", new HashPowerInfo(660, "H/s", 100));
+            _hardwarePower.Add("rx_470_cryptonightv7", new HashPowerInfo(660, "H/s", 100));
         }
 
         public static HashPowerInfo GetHashPowerInfo(string gpuModel, string algorithm)

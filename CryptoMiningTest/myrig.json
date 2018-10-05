@@ -39,6 +39,14 @@
     {
       "Name": "rx_570",
       "Count": 6
+    },
+    {
+      "Name": "rx_480",
+      "Count": 6
+    },
+    {
+      "Name": "rx_470",
+      "Count": 6
     }
   ]
 }

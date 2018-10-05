@@ -36,6 +36,7 @@ namespace CryptoMining.ApplicationCore
 
 
         private double _thaiBahtPerBTC = 0;
+        private double _usdPerBTC = 0;
 
         private void LoadCryptopiaPrice()
         {
@@ -187,6 +188,7 @@ namespace CryptoMining.ApplicationCore
                 () => LoadAhashAlgorithm());
                 
             _thaiBahtPerBTC = double.Parse(_bxAPI.LoadThaiBahtBtcPrice().bids[0][0]);
+            _usdPerBTC = _bnAPI.GetUsdPerBTCPrice();
         }
 
         public double MyHashRate { get; set; }
@@ -291,6 +293,7 @@ namespace CryptoMining.ApplicationCore
                () => LoadCryptopiaPrice(),
                () => LoadCrex2Price());
             _thaiBahtPerBTC = double.Parse(_bxAPI.LoadThaiBahtBtcPrice().bids[0][0]);
+            _usdPerBTC = _bnAPI.GetUsdPerBTCPrice();
         }
 
         public void RefreshPool()
@@ -433,11 +436,14 @@ namespace CryptoMining.ApplicationCore
         /// <param name="poolName"></param>
         /// <param name="exchangeName"></param>
         /// <returns></returns>
-        public double GetTotalBahtMiningPerday(string coinSymbol, PoolName poolName, ExchangeName exchangeName)
+        public double GetTotalFiatMoneyMiningPerday(string coinSymbol, PoolName poolName, ExchangeName exchangeName, FiatCurrency fiat)
         {
             double totalBtcPerDay = GetTotalBtcMiningPerday(coinSymbol, poolName, exchangeName);
-            return totalBtcPerDay * _thaiBahtPerBTC;
+            double fiatPerBTC = (fiat == FiatCurrency.Baht) ? _thaiBahtPerBTC : _usdPerBTC;
+            return totalBtcPerDay * fiatPerBTC;
         }
+
+
 
 
         /// <summary>
@@ -446,11 +452,13 @@ namespace CryptoMining.ApplicationCore
         /// <param name="algorithmName">algorithm name ex. lyra2z</param>
         /// <param name="poolName">PoolName enum</param>
         /// <returns></returns>
-        public double GetTotalBahtMiningPerday(string algorithmName, PoolName poolName, bool estimateCurrent)
+        public double GetTotalFiatMoneyMiningPerday(string algorithmName, PoolName poolName, bool estimateCurrent, FiatCurrency fiat)
         {
             double totalBtcPerDay = GetTotalBtcMiningPerday(algorithmName, poolName, estimateCurrent);
-            return totalBtcPerDay * _thaiBahtPerBTC;
+            double fiatPerBTC = (fiat == FiatCurrency.Baht) ? _thaiBahtPerBTC : _usdPerBTC; 
+            return totalBtcPerDay * fiatPerBTC;
         }
+
 
     }
 }

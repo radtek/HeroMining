@@ -83,5 +83,25 @@ namespace CryptoMiningTest
             }
             Assert.AreEqual(true, coins.Count > 0);
         }
+
+
+        [TestMethod]
+        public void TestUSDTFromBinance()
+        {
+            BinanceAPI api = new BinanceAPI();
+            List<BinanceCurrency> coins = api.LoadPrice();
+            foreach (ExchangeCurrency coin in coins)
+            {
+                if (coin.symbol == "BTCUSDT")
+                {
+                    Debug.WriteLine(string.Format("{0} bid={1} ask={2} last={3} volume={4} ", coin.symbol, coin.bid, coin.ask, coin.last, coin.volume));
+                    double btc = 0.005;
+                    double btcusd = (coin.bid ?? 0);
+                    double usd = btcusd * btc;
+                    Debug.WriteLine($"usd of {btc} btc = {usd}");
+                }
+            }
+            Assert.AreEqual(true, coins.Count > 0);
+        }
     }
 }
