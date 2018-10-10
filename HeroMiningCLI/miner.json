@@ -1,0 +1,17 @@
+{
+  "SwapTime": 1,
+  "Path": [
+    {
+      "Key": "skein@zpool",
+      "Value": "C:\\Miner\\CryptoDredge_0.9.2\\start-BTC-skein-zpool.bat"
+    },
+    {
+      "Key": "x17@zpool",
+      "Value": "C:\\Miner\\z-enemy.1-16-cuda9.2_x64\\start-BTC-x17-zpool.bat"
+    }
+  ],
+  "Exclude": [
+    "x16r@zerg",
+    "x17@zerg"
+  ]
+}

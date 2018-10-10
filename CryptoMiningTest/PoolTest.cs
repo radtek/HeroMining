@@ -119,10 +119,14 @@ namespace CryptoMiningTest
             CryptoCurrency currencies = api.LoadCurrency();
             CryptoCurrency.MANO manoCoin = currencies.Mano;
             double rewardPerBlock = double.Parse(manoCoin.reward);
-            int blockAllDay = manoCoin.h24_blocks;
+            int blockAllDay = manoCoin.h24_blocks_shared;
             long poolHashRate = manoCoin.hashrate??0;
-            double receiveBlockPerDay = (rewardPerBlock / (double)poolHashRate) * myHashRate * blockAllDay;
-            Assert.AreEqual(true, receiveBlockPerDay > 0);
+            if (manoCoin.hashrate_shared != null && manoCoin.hashrate_shared != 0)
+            {
+                poolHashRate = manoCoin.hashrate_shared ?? 0;
+            }
+            double receiveCoinPerDay = (rewardPerBlock / (double)poolHashRate) * myHashRate * blockAllDay;
+            Assert.AreEqual(true, receiveCoinPerDay > 0);
         }
 
 
@@ -136,6 +140,10 @@ namespace CryptoMiningTest
             double rewardPerBlock = double.Parse(manoCoin.reward);
             int blockAllDay = manoCoin.h24_blocks;
             long poolHashRate = manoCoin.hashrate??0;
+            if (manoCoin.hashrate_shared != null && manoCoin.hashrate_shared != 0)
+            {
+                poolHashRate = manoCoin.hashrate_shared ?? 0;
+            }
             double receiveCoinPerDay = (rewardPerBlock / (double)poolHashRate) * myHashRate * blockAllDay;
             Assert.AreEqual(true, receiveCoinPerDay > 0);
         }
@@ -151,6 +159,10 @@ namespace CryptoMiningTest
             double rewardPerBlock = double.Parse(ginCoin.reward);
             int blockAllDay = ginCoin.h24_blocks;
             long poolHashRate = ginCoin.hashrate ?? 0;
+            if (ginCoin.hashrate_shared != null && ginCoin.hashrate_shared != 0)
+            {
+                poolHashRate = ginCoin.hashrate_shared ?? 0;
+            }
             double receiveCoinPerDay = (rewardPerBlock / (double)poolHashRate) * myHashRate * blockAllDay;
             Assert.AreEqual(true, receiveCoinPerDay > 0);
         }
@@ -178,6 +190,10 @@ namespace CryptoMiningTest
                 double rewardPerBlock = double.Parse(ginCoin.reward);
                 int blockAllDay = ginCoin.h24_blocks;
                 long poolHashRate = ginCoin.hashrate ?? 0;
+                if (ginCoin.hashrate_shared != null && ginCoin.hashrate_shared != 0)
+                {
+                    poolHashRate = ginCoin.hashrate_shared ?? 0;
+                }
                 double receiveCoinPerDay = (rewardPerBlock / (double)poolHashRate) * myHashRate * blockAllDay;
                 System.Diagnostics.Debug.WriteLine(string.Format("round {0} GIN pool hashrate: {1} \t coin per day: {2}", i, poolHashRate, receiveCoinPerDay));
                 System.Threading.Thread.Sleep(5000);

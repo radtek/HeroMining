@@ -401,7 +401,8 @@ namespace HeroMiningCLI
             {
                 foreach (string symbol in CurrencyName.Symbols)
                 {
-                    if (bsodCoins != null && bsodCoins[symbol] != null)
+                    string coinAtPool = string.Format("{0}@{1}", symbol, PoolName.Bsod);
+                    if (bsodCoins != null && bsodCoins[symbol] != null && !ExcludeCoinAtPool.ExcludeCoins.Contains(coinAtPool))
                     {
                         double moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.CryptoBridge);
                         if (moneyPerDay > _keepMoreThan)
@@ -467,7 +468,8 @@ namespace HeroMiningCLI
                             ShowNumOfCoinMiningPerDay(symbol, PoolName.Bsod);
                     }
 
-                    if (gosCoins != null && gosCoins[symbol] != null)
+                    coinAtPool = string.Format("{0}@{1}", symbol, PoolName.Gos);
+                    if (gosCoins != null && gosCoins[symbol] != null && !ExcludeCoinAtPool.ExcludeCoins.Contains(coinAtPool))
                     {
 
                         double moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.CryptoBridge);

@@ -6,6 +6,7 @@ namespace CryptoMining.ApplicationCore.Pool
 {
     public class CurrencyBase
     {
+
         public string algo { get; set; }
         public string port { get; set; }
         public string name { get; set; }
@@ -15,10 +16,14 @@ namespace CryptoMining.ApplicationCore.Pool
         public int workers { get; set; }
         public int shares { get; set; }
         public Int64? hashrate { get; set; }
+        public Int64? hashrate_shared { get; set; }
+         public Int64? hashrate_solo { get; set; }
         public string network_hashrate { get; set; }
         public string estimate { get; set; }
         public string percent_blocks { get; set; }
         public int h24_blocks { get; set; }
+        public int h24_blocks_shared { get; set; }
+        public int h24_blocks_solo { get; set; }
         public double h24_btc { get; set; }
         public string h24_coins { get; set; }
         public int lastblock { get; set; }

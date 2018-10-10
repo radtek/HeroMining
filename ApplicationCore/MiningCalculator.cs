@@ -327,6 +327,10 @@ namespace CryptoMining.ApplicationCore
             if (coin != null)
             {
                 long poolHashRate = coin.hashrate ?? 0;
+                if (coin.hashrate_shared != null && coin.hashrate_shared != 0)
+                {
+                    poolHashRate = coin.hashrate_shared ?? 0;
+                }
                 if (poolHashRate == 0)
                 {
                     Debug.WriteLine(string.Format("Can not calculate num of coin per day because nobody mining {0} coin.", coinSymbol));
@@ -338,6 +342,10 @@ namespace CryptoMining.ApplicationCore
                 if (rewardPerBlock == -1)
                     rewardPerBlock = double.Parse(coin.reward);
                 int blockAllDay = coin.h24_blocks;
+                if (coin.h24_blocks_shared != 0)
+                {
+                    blockAllDay = coin.h24_blocks_shared;
+                }
                 double receiveCoinsPerDay = 0;
                 if (MyHashRate > poolHashRate) // test กรณี แรงเรามากกว่าแรง pool
                 {

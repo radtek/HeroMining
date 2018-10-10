@@ -52,12 +52,17 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MiscTest.cs" />
+    <Compile Include="MinerTest.cs" />
     <Compile Include="ExchangeTest.cs" />
     <Compile Include="PoolTest.cs" />
     <Compile Include="ApplicationCoreTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="miner.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="myrig.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
