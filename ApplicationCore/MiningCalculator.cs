@@ -342,7 +342,7 @@ namespace CryptoMining.ApplicationCore
                 if (rewardPerBlock == -1)
                     rewardPerBlock = double.Parse(coin.reward);
                 int blockAllDay = coin.h24_blocks;
-                if (coin.h24_blocks_shared != 0)
+                if (coin.h24_blocks_shared != -1)
                 {
                     blockAllDay = coin.h24_blocks_shared;
                 }

@@ -17,7 +17,7 @@ namespace CryptoMining.ApplicationCore.Pool
         public int shares { get; set; }
         public Int64? hashrate { get; set; }
         public Int64? hashrate_shared { get; set; }
-         public Int64? hashrate_solo { get; set; }
+        public Int64? hashrate_solo { get; set; }
         public string network_hashrate { get; set; }
         public string estimate { get; set; }
         public string percent_blocks { get; set; }
@@ -30,5 +30,10 @@ namespace CryptoMining.ApplicationCore.Pool
         public int timesincelast { get; set; }
         public int hashRateDiscountPercent { get; set; }
         public string symbol { get; set; }
+
+        public CurrencyBase()
+        {
+            h24_blocks_shared = -1;
+        }
     }
 }

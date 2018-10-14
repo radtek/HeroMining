@@ -120,7 +120,7 @@ namespace CryptoMiningTest
             CryptoCurrency.MANO manoCoin = currencies.Mano;
             double rewardPerBlock = double.Parse(manoCoin.reward);
             int blockAllDay = manoCoin.h24_blocks_shared;
-            long poolHashRate = manoCoin.hashrate??0;
+            long poolHashRate = manoCoin.hashrate ?? 0;
             if (manoCoin.hashrate_shared != null && manoCoin.hashrate_shared != 0)
             {
                 poolHashRate = manoCoin.hashrate_shared ?? 0;
@@ -139,7 +139,7 @@ namespace CryptoMiningTest
             CryptoCurrency.MANO manoCoin = currencies.Mano;
             double rewardPerBlock = double.Parse(manoCoin.reward);
             int blockAllDay = manoCoin.h24_blocks;
-            long poolHashRate = manoCoin.hashrate??0;
+            long poolHashRate = manoCoin.hashrate ?? 0;
             if (manoCoin.hashrate_shared != null && manoCoin.hashrate_shared != 0)
             {
                 poolHashRate = manoCoin.hashrate_shared ?? 0;
@@ -199,6 +199,53 @@ namespace CryptoMiningTest
                 System.Threading.Thread.Sleep(5000);
             }
             Assert.AreEqual(true, true);
+        }
+
+        [TestMethod]
+        public void TestGetMiningZcoinCoinFromBsodPerday10Rounds()
+        {
+            long myHashRate = 120000000L;
+            BsodAPI api = new BsodAPI();
+            double receiveCoinsPerDay = 0;
+
+            CryptoCurrency currencies = api.LoadCurrency();
+            CryptoCurrency.XZC coin = currencies.Xzc;
+            if (coin != null)
+            {
+                int blockAllDay = coin.h24_blocks;
+                long poolHashRate = coin.hashrate ?? 0;
+                if (coin.h24_blocks_shared != -1 )
+                {
+                    blockAllDay = coin.h24_blocks_shared;
+                }
+                if (coin.hashrate_shared != null && coin.hashrate_shared != 0)
+                {
+                    poolHashRate = coin.hashrate_shared ?? 0;
+                }
+                if (poolHashRate == 0)
+                {
+                    Debug.WriteLine(string.Format("Can not calculate num of coin per day because nobody mining {0} coin.", coin.symbol));
+                }
+                if (coin.hashRateDiscountPercent > 0)  // กรณีเหรียญที่แรงแกว่งมากๆ ให้ discount จำนวนที่ขุดได้ลง
+                    poolHashRate = poolHashRate + (poolHashRate * coin.hashRateDiscountPercent / 100);
+                double rewardPerBlock = PoolReward.GetPoolOverrideReward(PoolName.Bsod, coin.symbol);
+                if (rewardPerBlock == -1)
+                {
+                    rewardPerBlock = double.Parse(coin.reward);
+                }
+
+                if (myHashRate > poolHashRate) // test กรณี แรงเรามากกว่าแรง pool
+                {
+                    receiveCoinsPerDay = (rewardPerBlock * blockAllDay) * (1 - (poolHashRate / myHashRate));
+                }
+                else
+                {
+                    // receiveCoinsPerDay = (rewardPerBlock / poolHashRate) * MyHashRate * blockAllDay;
+                    receiveCoinsPerDay = (myHashRate / (double)poolHashRate) * (blockAllDay * rewardPerBlock);
+                }
+            }
+
+            Assert.AreEqual(true, receiveCoinsPerDay > -1);
         }
 
 
