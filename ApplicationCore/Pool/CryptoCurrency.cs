@@ -61,6 +61,11 @@ namespace CryptoMining.ApplicationCore.Pool
 
         }
 
+        public class BCD : CurrencyBase
+        {
+
+        }
+
         public class BCF : CurrencyBase
         {
 
@@ -2398,6 +2403,9 @@ namespace CryptoMining.ApplicationCore.Pool
         [JsonProperty("BBK")]
         public BBK Bbk { get; set; }
 
+        [JsonProperty("BCD")]
+        public BCD Bcd { get; set; }
+
         [JsonProperty("BHD")]
         public BHD Bhd { get; set; }
 
@@ -2558,6 +2566,8 @@ namespace CryptoMining.ApplicationCore.Pool
                         return Bashc;
                     case "BBK":
                         return Bbk;
+                    case "BCD":
+                        return Bcd;
                     case "BHD":
                         return Bhd;
                     case "BNX":

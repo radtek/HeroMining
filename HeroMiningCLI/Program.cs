@@ -21,6 +21,7 @@ namespace HeroMiningCLI
         private static bool _needMonitor = false;
         private static string _monitorCoin = "";
         private static FiatCurrency _fiat = FiatCurrency.Baht;
+        private static List<CryptoCurrencyResult> _coinsResult = new List<CryptoCurrencyResult>();
 
         static void ParseArgument(string[] args)
         {
@@ -103,16 +104,47 @@ namespace HeroMiningCLI
 
         }
 
+        private static void ExploreMiningDetail(CryptoCurrency coins, string symbol, PoolName pool, ExchangeName exchange)
+        {
+            double moneyPerDay = GetMiningFiatPerDay(symbol, coins[symbol].algo, pool, exchange);
+            if (moneyPerDay > _keepMoreThan)
+            {
+                _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, coins[symbol].algo, pool, exchange, moneyPerDay));
+                CryptoCurrencyResult coin = new CryptoCurrencyResult();
+                coin.symbol = symbol;
+                coin.h24_btc = moneyPerDay;
+                coin.Pool = pool;
+                coin.algo = coins[symbol].algo;
+                coin.Exchange = exchange;
+                _coinsResult.Add(coin);
+            }
+        }
+
+        private static void ExploreMining(CryptoCurrency coins, string symbol, PoolName pool)
+        {
+            string coinAtPool = string.Format("{0}@{1}", symbol, pool);
+            if (coins != null && coins[symbol] != null && !ExcludeCoinAtPool.ExcludeCoins.Contains(coinAtPool))
+            {
+                ExploreMiningDetail(coins, symbol, pool, ExchangeName.CryptoBridge);
+                ExploreMiningDetail(coins, symbol, pool, ExchangeName.Crex24);
+                ExploreMiningDetail(coins, symbol, pool, ExchangeName.Cryptopia);
+                ExploreMiningDetail(coins, symbol, pool, ExchangeName.Binance);
+                ExploreMiningDetail(coins, symbol, pool, ExchangeName.CoinExchange);
+                if (_needToShowCoinsNumPerDay)
+                    ShowNumOfCoinMiningPerDay(symbol, pool);
+            }
+        }
+
         static void Main(string[] args)
         {
             Console.CancelKeyPress += Console_CancelKeyPress;
             BsodAPI bsod = new BsodAPI();
             GosAPI gos = new GosAPI();
-            List<CryptoCurrencyResult> coinsResult = new List<CryptoCurrencyResult>();
+
             List<AlgorithmResult> algorResult = new List<AlgorithmResult>();
 
             ParseArgument(args);
-         
+
 
             Rig myRig = ReadRigConfig("myrig.json");
 
@@ -122,6 +154,7 @@ namespace HeroMiningCLI
             _calc = new MiningCalculator();
             CryptoCurrency bsodCoins = _calc.PoolCoins[0];
             CryptoCurrency gosCoins = _calc.PoolCoins[1];
+            CryptoCurrency iceCoins = _calc.PoolCoins[2];
             Algorithm zergAlgorithm = _calc.PoolAlgorithms[0];
             Algorithm phiAlgorithm = _calc.PoolAlgorithms[1];
             Algorithm zpoolAlgorithm = _calc.PoolAlgorithms[2];
@@ -144,153 +177,15 @@ namespace HeroMiningCLI
                 string symbol = _monitorCoin;
                 while (input != Environment.NewLine && input != "q")
                 {
-                    coinsResult.Clear();
-                    if (bsodCoins != null && bsodCoins[symbol] != null)
-                    {
-                        double moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.CryptoBridge);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "crypto-bridge", moneyPerDay));
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Bsod;
-                            coin.algo = bsodCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.CryptoBridge;
-                            coinsResult.Add(coin);
-                        }
+                    _coinsResult.Clear();
 
-                        moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Crex24);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "crex24", moneyPerDay));
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Bsod;
-                            coin.algo = bsodCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Crex24;
-                            coinsResult.Add(coin);
-                        }
+                    ExploreMining(bsodCoins, symbol, PoolName.Bsod);
+                    ExploreMining(gosCoins, symbol, PoolName.Gos);
+                    ExploreMining(iceCoins, symbol, PoolName.IceMining);
 
-                        moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Cryptopia);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "cryptopia", moneyPerDay));
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Bsod;
-                            coin.algo = bsodCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Cryptopia;
-                            coinsResult.Add(coin);
-                        }
-
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Binance);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "binance", moneyPerDay));
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Bsod;
-                            coin.algo = bsodCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Binance;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.CoinExchange);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, bsodCoins[symbol].algo, "bsod", "coinexchange", moneyPerDay));
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Bsod;
-                            coin.algo = bsodCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.CoinExchange;
-                            coinsResult.Add(coin);
-                        }
-
-                        if (_needToShowCoinsNumPerDay)
-                            ShowNumOfCoinMiningPerDay(symbol, PoolName.Bsod);
-                    }
-
-                    if (gosCoins != null && gosCoins[symbol] != null)
-                    {
-
-                        double moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.CryptoBridge);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "crypto-bridge", moneyPerDay));
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Gos;
-                            coin.algo = gosCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.CryptoBridge;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Crex24);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "crex24", moneyPerDay));
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Gos;
-                            coin.algo = gosCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Crex24;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Cryptopia);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "cryptopia", moneyPerDay));
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Gos;
-                            coin.algo = gosCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Cryptopia;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Binance);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "binance", moneyPerDay));
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Gos;
-                            coin.algo = gosCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Binance;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.CoinExchange);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", symbol, gosCoins[symbol].algo, "gos", "coinexchange", moneyPerDay));
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Gos;
-                            coin.algo = gosCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.CoinExchange;
-                            coinsResult.Add(coin);
-                        }
-
-                        if (_needToShowCoinsNumPerDay)
-                            ShowNumOfCoinMiningPerDay(symbol, PoolName.Gos);
-                    }
-
-                    coinsResult.Sort();
-                    foreach (CryptoCurrencyResult coin in coinsResult)
+                    // display result
+                    _coinsResult.Sort();
+                    foreach (CryptoCurrencyResult coin in _coinsResult)
                     {
                         string line = string.Format("{0} {1}(24hr)\t{2}@{3} \tsale@{4}", coin.h24_btc.ToString("N2"), _fiat, coin.symbol, coin.Pool, coin.Exchange);
                         Console.WriteLine(line);
@@ -377,7 +272,7 @@ namespace HeroMiningCLI
                     algorResult.Sort();
                     foreach (AlgorithmResult algor in algorResult)
                     {
-                        string line = string.Format("{0} {1}(24hr)\t{2} {3}(current) \t{4}@{5}", algor.estimate_last24h.ToString("N2"), _fiat, algor.estimate_current.ToString("N2"),_fiat, algor.name, algor.Pool);
+                        string line = string.Format("{0} {1}(24hr)\t{2} {3}(current) \t{4}@{5}", algor.estimate_last24h.ToString("N2"), _fiat, algor.estimate_current.ToString("N2"), _fiat, algor.name, algor.Pool);
                         Console.WriteLine(line);
                         _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", algor.name, algor.Pool, "bx", algor.estimate_last24h.ToString("F2"), algor.estimate_current.ToString("F2")));
 
@@ -401,143 +296,15 @@ namespace HeroMiningCLI
             {
                 foreach (string symbol in CurrencyName.Symbols)
                 {
-                    string coinAtPool = string.Format("{0}@{1}", symbol, PoolName.Bsod);
-                    if (bsodCoins != null && bsodCoins[symbol] != null && !ExcludeCoinAtPool.ExcludeCoins.Contains(coinAtPool))
-                    {
-                        double moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.CryptoBridge);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Bsod;
-                            coin.algo = bsodCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.CryptoBridge;
-                            coinsResult.Add(coin);
-                        }
 
-                        moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Crex24);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Bsod;
-                            coin.algo = bsodCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Crex24;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Cryptopia);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Bsod;
-                            coin.algo = bsodCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Cryptopia;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.Binance);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Bsod;
-                            coin.algo = bsodCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Binance;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, bsodCoins[symbol].algo, PoolName.Bsod, ExchangeName.CoinExchange);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Bsod;
-                            coin.algo = bsodCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.CoinExchange;
-                            coinsResult.Add(coin);
-                        }
-
-                        if (_needToShowCoinsNumPerDay)
-                            ShowNumOfCoinMiningPerDay(symbol, PoolName.Bsod);
-                    }
-
-                    coinAtPool = string.Format("{0}@{1}", symbol, PoolName.Gos);
-                    if (gosCoins != null && gosCoins[symbol] != null && !ExcludeCoinAtPool.ExcludeCoins.Contains(coinAtPool))
-                    {
-
-                        double moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.CryptoBridge);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Gos;
-                            coin.algo = gosCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.CryptoBridge;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Crex24);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Gos;
-                            coin.algo = gosCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Crex24;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Cryptopia);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Gos;
-                            coin.algo = gosCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Cryptopia;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.Binance);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Gos;
-                            coin.algo = gosCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.Binance;
-                            coinsResult.Add(coin);
-                        }
-
-                        moneyPerDay = GetMiningFiatPerDay(symbol, gosCoins[symbol].algo, PoolName.Gos, ExchangeName.CoinExchange);
-                        if (moneyPerDay > _keepMoreThan)
-                        {
-                            CryptoCurrencyResult coin = new CryptoCurrencyResult();
-                            coin.symbol = symbol;
-                            coin.h24_btc = moneyPerDay;
-                            coin.Pool = PoolName.Gos;
-                            coin.algo = gosCoins[symbol].algo;
-                            coin.Exchange = ExchangeName.CoinExchange;
-                            coinsResult.Add(coin);
-                        }
-
-                        if (_needToShowCoinsNumPerDay)
-                            ShowNumOfCoinMiningPerDay(symbol, PoolName.Gos);
-                    }
+                    ExploreMining(bsodCoins, symbol, PoolName.Bsod);
+                    ExploreMining(gosCoins, symbol, PoolName.Gos);
+                    ExploreMining(iceCoins, symbol, PoolName.IceMining);
                 }
 
-                coinsResult.Sort();
+                _coinsResult.Sort();
+
+                // display
 
                 Console.WriteLine();
                 Console.WriteLine("Analyzing gpu ...");
@@ -547,13 +314,13 @@ namespace HeroMiningCLI
                 }
                 Console.WriteLine();
 
-                foreach (CryptoCurrencyResult coin in coinsResult)
+                foreach (CryptoCurrencyResult coin in _coinsResult)
                 {
-                    string line = string.Format("{0} {1}(24hr)\t{2}@{3} \tsale@{4}", coin.h24_btc.ToString("N2"), _fiat ,coin.symbol, coin.Pool, coin.Exchange);
-                    _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", coin.symbol, coin.algo,coin.Pool, coin.Exchange, coin.h24_btc.ToString("F2")));
+                    string line = string.Format("{0} {1}(24hr)\t{2}@{3} \tsale@{4}", coin.h24_btc.ToString("N2"), _fiat, coin.symbol, coin.Pool, coin.Exchange);
+                    _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", coin.symbol, coin.algo, coin.Pool, coin.Exchange, coin.h24_btc.ToString("F2")));
                     Console.WriteLine(line);
                 }
-    
+
                 Console.WriteLine();
                 Console.WriteLine("Analyzing auto btc pool ...");
                 Console.WriteLine();

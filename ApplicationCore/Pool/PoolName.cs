@@ -9,6 +9,7 @@ namespace CryptoMining.ApplicationCore.Pool
         AhashPool,
         Gos,
         Bsod,
+        IceMining,
         PhiPhi,
         Zerg,
         Zpool

@@ -34,6 +34,7 @@ namespace CryptoMining.ApplicationCore.Pool
             _coins.Add("BANQ");
             _coins.Add("BASHC");
             _coins.Add("BBK");
+            _coins.Add("BCD");
             _coins.Add("BCF");
             _coins.Add("BHD");
             _coins.Add("BNX");

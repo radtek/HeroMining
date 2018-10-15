@@ -17,6 +17,7 @@ namespace CryptoMining.ApplicationCore
         private Crex24API _crexAPI = new Crex24API();
         private BsodAPI _bsodAPI = new BsodAPI();
         private GosAPI _gosAPI = new GosAPI();
+        private IceMiningAPI _iceAPI = new IceMiningAPI();
         private ZergAPI _zergAPI = new ZergAPI();
         private PhiPhiAPI _phiAPI = new PhiPhiAPI();
         private AhashPoolAPI _ahashAPI = new AhashPoolAPI();
@@ -29,6 +30,7 @@ namespace CryptoMining.ApplicationCore
         private List<CoinExchangeCurrency> _coinExchangeCoinsPrice = new List<CoinExchangeCurrency>();
         private CryptoCurrency _bsodCurrencies = new CryptoCurrency();
         private CryptoCurrency _gosCurrencies = new CryptoCurrency();
+        private CryptoCurrency _iceCurrencies = new CryptoCurrency();
         private Algorithm _zergAlgorithm = new Algorithm();
         private Algorithm _phiAlgorithm = new Algorithm();
         private Algorithm _zpoolAlgorithm = new Algorithm();
@@ -123,6 +125,18 @@ namespace CryptoMining.ApplicationCore
             }
         }
 
+        private void LoadIceMiningCurrencies()
+        {
+            try
+            {
+                _iceCurrencies = _iceAPI.LoadCurrency();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+        }
+
         private void LoadZergAlgorithm()
         {
             try
@@ -182,7 +196,8 @@ namespace CryptoMining.ApplicationCore
                 () => LoadCrex2Price(),
                 () => LoadBsodCurrencies(),
                 () => LoadGosCurrencies(),
-                () => LoadZergAlgorithm(),
+                () => LoadIceMiningCurrencies(),
+                //     () => LoadZergAlgorithm(),
                 () => LoadPhiPhiAlgorithm(),
                 () => LoadZpoolAlgorithm(),
                 () => LoadAhashAlgorithm());
@@ -197,7 +212,7 @@ namespace CryptoMining.ApplicationCore
         {
             get
             {
-                return new List<CryptoCurrency> { _bsodCurrencies, _gosCurrencies };
+                return new List<CryptoCurrency> { _bsodCurrencies, _gosCurrencies, _iceCurrencies };
             }
         }
 
@@ -301,8 +316,9 @@ namespace CryptoMining.ApplicationCore
             Parallel.Invoke(
                 () => LoadBsodCurrencies(),
                 () => LoadGosCurrencies(),
+                () => LoadIceMiningCurrencies(),
                 () => LoadAhashAlgorithm(),
-                () => LoadZergAlgorithm(),
+            //    () => LoadZergAlgorithm(),
                 () => LoadZpoolAlgorithm());
         }
 
@@ -318,6 +334,10 @@ namespace CryptoMining.ApplicationCore
             else if (poolName == PoolName.Gos)
             {
                 coin = _gosCurrencies[coinSymbol];
+            }
+            else if (poolName == PoolName.IceMining)
+            {
+                coin = _iceCurrencies[coinSymbol];
             }
             else if (poolName == PoolName.Zerg || poolName == PoolName.PhiPhi)
             {
