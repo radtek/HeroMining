@@ -220,7 +220,7 @@ namespace CryptoMining.ApplicationCore.Miner
             }
             catch(Exception err)
             {
-                throw err;
+                System.Diagnostics.Debug.WriteLine(err.Message);
             }
 
         }
