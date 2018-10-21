@@ -1,17 +1,23 @@
 {
-  "SwapTime": 1,
+  "SwapTime": 0.1,
+  "UseCurrent": true,
   "Path": [
     {
-      "Key": "skein@zpool",
-      "Value": "C:\\Miner\\CryptoDredge_0.9.2\\start-BTC-skein-zpool.bat"
+      "Key": "bcd@IceMining",
+      "Value": "C:\\SoftwareMiner\\t-rex-0.7.0-win-cuda9.2\\start-bcd-bcd-icemining.bat"
     },
     {
       "Key": "x17@zpool",
-      "Value": "C:\\Miner\\z-enemy.1-16-cuda9.2_x64\\start-BTC-x17-zpool.bat"
+      "Value": "C:\\SoftwareMiner\\z-enemy.1-16-cuda9.2_x64\\start-BTC-x17-zpool.bat"
+    },
+    {
+      "Key": "bcd@zpool",
+      "Value": "C:\\SoftwareMiner\\t-rex-0.7.0-win-cuda9.2\\start-bcd-bcd-zpool.bat"
     }
   ],
   "Exclude": [
     "x16r@zerg",
     "x17@zerg"
   ]
+
 }

@@ -217,10 +217,6 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("rx_vega_64_cryptonightv7", new HashPowerInfo(2050, "H/s", 200));
 
 
-
-
-
-
             _hardwarePower.Add("rx_vega_56_equihash", new HashPowerInfo(460, "Sol/s", 314));
             _hardwarePower.Add("rx_vega_56_ethash", new HashPowerInfo(36500000, "H/s", 210));
             _hardwarePower.Add("rx_vega_56_x16s", new HashPowerInfo(11000000, "H/s", 175));
@@ -236,7 +232,7 @@ namespace CryptoMining.ApplicationCore
             _hardwarePower.Add("rx_vega_56_cryptonight", new HashPowerInfo(1850, "H/s", 190));
             _hardwarePower.Add("rx_vega_56_cryptonightv7", new HashPowerInfo(1850, "H/s", 190));
 
-
+            _hardwarePower.Add("rx_580_bcd", new HashPowerInfo(8000000, "H/s", 150));
             _hardwarePower.Add("rx_580_equihash", new HashPowerInfo(310, "Sol/s", 230));
             _hardwarePower.Add("rx_580_ethash", new HashPowerInfo(30200000, "H/s", 135));
             _hardwarePower.Add("rx_580_neoscrypt", new HashPowerInfo(1000000, "H/s", 150));

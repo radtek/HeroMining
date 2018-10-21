@@ -81,19 +81,19 @@ namespace CryptoMiningTest
 
             MiningCalculator calc = new MiningCalculator();
             calc.MyHashRate = 120000000L;
-            double miningManoBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MANO", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningIfxBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("IFX", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningGinBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("GIN", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningVtlBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("VTL", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningMctBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MCT", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningGtmBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("GTM", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningMeriBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MERI", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningFxTCBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("FXTC", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningAlpsBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("ALPS", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningCrsBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("CRS", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
+            double miningManoBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MANO", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningIfxBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("IFX", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningGinBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("GIN", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningVtlBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("VTL", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningMctBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MCT", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningGtmBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("GTM", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningMeriBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MERI", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningFxTCBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("FXTC", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningAlpsBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("ALPS", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningCrsBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("CRS", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
 
             calc.MyHashRate = 350000000L;
-            double miningXdnaBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("XDNA", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
+            double miningXdnaBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("XDNA", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
 
 
             System.Diagnostics.Debug.WriteLine(string.Format("MANO = {0}", miningManoBahtPerDay));
@@ -118,19 +118,19 @@ namespace CryptoMiningTest
 
             MiningCalculator calc = new MiningCalculator();
             calc.MyHashRate = 120000000L;
-            double miningManoBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MANO", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningIfxBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("IFX", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningGinBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("GIN", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningVtlBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("VTL", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningMctBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MCT", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningGtmBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("GTM", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningMeriBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MERI", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningFxTCBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("FXTC", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningAlpsBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("ALPS", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
-            double miningCrsBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("CRS", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
+            double miningManoBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MANO", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningIfxBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("IFX", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningGinBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("GIN", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningVtlBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("VTL", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningMctBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MCT", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningGtmBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("GTM", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningMeriBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("MERI", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningFxTCBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("FXTC", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningAlpsBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("ALPS", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
+            double miningCrsBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("CRS", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
 
             calc.MyHashRate = 350000000L;
-            double miningXdnaBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("XDNA", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.Baht);
+            double miningXdnaBahtPerDay = calc.GetTotalFiatMoneyMiningPerday("XDNA", PoolName.Gos, ExchangeName.CryptoBridge, FiatCurrency.THB);
 
             System.Diagnostics.Debug.WriteLine("Mining by gos.cx");
             System.Diagnostics.Debug.WriteLine(string.Format("MANO = {0}", miningManoBahtPerDay));
@@ -276,7 +276,7 @@ namespace CryptoMiningTest
             double hashRate = HashPower.GetAlgorithmHashRate(algorithm);
             calc.MyHashRate = hashRate;
             System.Diagnostics.Debug.WriteLine(string.Format("My hashrate of algor {0} = {1} ", algorithm, calc.MyHashRate));
-            double bahtPerDay = calc.GetTotalFiatMoneyMiningPerday(coinSymbol, pool, exchangeName, FiatCurrency.Baht);
+            double bahtPerDay = calc.GetTotalFiatMoneyMiningPerday(coinSymbol, pool, exchangeName, FiatCurrency.THB);
             System.Diagnostics.Debug.WriteLine(string.Format("Total baht per day at {0} of {1} ==========> {2} Baht ", exchangeName, coinSymbol, bahtPerDay));
             return bahtPerDay;
         }
@@ -325,7 +325,7 @@ namespace CryptoMiningTest
 
             System.Diagnostics.Debug.WriteLine(calc.MyHashRate);
 
-            double miningGbxBtcPerDay = calc.GetTotalFiatMoneyMiningPerday("GBX", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.Baht);
+            double miningGbxBtcPerDay = calc.GetTotalFiatMoneyMiningPerday("GBX", PoolName.Bsod, ExchangeName.CryptoBridge, FiatCurrency.THB);
       //      double miningLincBtcPerDay = calc.GetTotalBtcMiningPerday("LINC", PoolName.Bsod, ExchangeName.Crex24);
       //      double miningUfoBtcPerDay = calc.GetTotalBtcMiningPerday("UFO", PoolName.Bsod, ExchangeName.CryptoBridge);
 
@@ -447,8 +447,8 @@ namespace CryptoMiningTest
             foreach (string algorithmName in AlgoritmName.Symbols)
             {
                 calc.MyHashRate = HashPower.GetAlgorithmHashRate(algorithmName);
-                double btcCurrentPerDay = calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.Zerg, true, FiatCurrency.Baht);
-                double btc24HoursPerDay = calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.Zerg, false, FiatCurrency.Baht);
+                double btcCurrentPerDay = calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.Zerg, true, FiatCurrency.THB);
+                double btc24HoursPerDay = calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.Zerg, false, FiatCurrency.THB);
                 Debug.WriteLine(string.Format("{0} estimate_current: {1} baht estimate_24hour: {2} baht ", algorithmName, btcCurrentPerDay.ToString("N2"), btc24HoursPerDay.ToString("N2")));
                 Assert.AreEqual(true, btcCurrentPerDay > -1);
             }

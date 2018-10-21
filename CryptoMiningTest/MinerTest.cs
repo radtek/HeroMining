@@ -11,6 +11,7 @@ using CryptoMining.ApplicationCore;
 using System.Diagnostics;
 using System.Text;
 using CryptoMining.ApplicationCore.Miner;
+using CryptoMining.ApplicationCore.Log;
 
 namespace CryptoMiningTest
 {
@@ -28,9 +29,11 @@ namespace CryptoMiningTest
             exclude.Add("x16r@zerg");
             exclude.Add("x17@zerg");
             miners.SwapTime = 1;
+            miners.UseCurrent = true;
             miners.Path = path;
             miners.Exclude = exclude;
             string json = JsonConvert.SerializeObject(miners);
+            System.IO.File.WriteAllText("miner.json", json);
             Assert.AreEqual(true, json.Length > 0);
         }
 
@@ -47,7 +50,10 @@ namespace CryptoMiningTest
         [TestMethod]
         public void TestGetBestAlgorPrice()
         {
+            string json = System.IO.File.ReadAllText("miner.json");
+            MinerModel miners = JsonConvert.DeserializeObject<MinerModel>(json);
             List<AlgorithmResult> algors = new List<AlgorithmResult>();
+            List<KeyValuePair<string, string>> paths = new List<KeyValuePair<string, string>>();
             AlgorithmResult algorX17 = new AlgorithmResult();
             algorX17.name = "x17";
             algorX17.Pool = PoolName.Zpool;
@@ -62,7 +68,11 @@ namespace CryptoMiningTest
             algorSkein.estimate_last24h = 400;
             algors.Add(algorSkein);
 
-            string algorAtPool = MinerControl.FindBestPrice(algors, true);
+            paths.Add(new KeyValuePair<string, string>("x17@zpool", "c:\\miner\\start-t-rex.bat"));
+            miners.Path = paths;
+            string algorAtPool;
+            double price;
+            (algorAtPool, price) = MinerControl.FindBestPrice(algors, true, miners);
             Assert.AreEqual(0, String.Compare("x17@zpool", algorAtPool, true));
 
         }
@@ -72,6 +82,9 @@ namespace CryptoMiningTest
         public void TestDoMining()
         {
             List<AlgorithmResult> algors = new List<AlgorithmResult>();
+            List<KeyValuePair<string, string>> paths = new List<KeyValuePair<string, string>>();
+            string json = System.IO.File.ReadAllText("miner.json");
+            MinerModel miners = JsonConvert.DeserializeObject<MinerModel>(json);
             AlgorithmResult algorX17 = new AlgorithmResult();
             algorX17.name = "x17";
             algorX17.Pool = PoolName.Zpool;
@@ -86,10 +99,12 @@ namespace CryptoMiningTest
             algorSkein.estimate_last24h = 400;
             algors.Add(algorSkein);
 
-            string bestAlgorAtPool = MinerControl.FindBestPrice(algors, true);
+            paths.Add(new KeyValuePair<string, string>("x17@zpool", "C:\\SoftwareMiner\\CryptoDredge_0.9.3\\start-BCD-bcd-zpool.bat"));
+            miners.Path = paths;
+            string bestAlgorAtPool;
+            double bestPrice;
+            (bestAlgorAtPool, bestPrice) = MinerControl.FindBestPrice(algors, true, miners);
 
-            string json = System.IO.File.ReadAllText("miner.json");
-            MinerModel miners = JsonConvert.DeserializeObject<MinerModel>(json);
 
             MinerControl.DoMining(bestAlgorAtPool, miners.Path);
 
@@ -102,13 +117,35 @@ namespace CryptoMiningTest
             algorNewGreater.estimate_last24h = 1000;
             algors.Add(algorNewGreater);
 
-            bestAlgorAtPool = MinerControl.FindBestPrice(algors, true);
+            (bestAlgorAtPool, bestPrice) = MinerControl.FindBestPrice(algors, true, miners);
             MinerControl.DoMining(bestAlgorAtPool, miners.Path);
 
             Assert.AreEqual(true, miners.SwapTime > 0);
         }
 
-
-
+        [TestMethod]
+        public void TestKillProcess()
+        {
+            string path = "C:\\SoftwareMiner\\CryptoDredge_0.9.3\\start-BCD-bcd-zpool.bat";
+            Process _runningMinerProcess;
+            var startInfo = new ProcessStartInfo();
+            startInfo.WorkingDirectory = System.IO.Path.GetDirectoryName(path);
+            startInfo.CreateNoWindow = false;
+            startInfo.UseShellExecute = true;
+            //        startInfo.RedirectStandardOutput = false;
+            startInfo.FileName = path;
+            _runningMinerProcess = System.Diagnostics.Process.Start(startInfo);
+            string message = DateTime.Now.ToString("yyyy-MM-dd HH':'mm") + " start " + path;
+            EasyLog.Log(@"c:\\Log\\minerlog.txt", message);
+            System.Threading.Thread.Sleep(10000);
+            if (_runningMinerProcess != null)
+            {
+                MinerControl.KillProcessAndChildrens(_runningMinerProcess.Id);
+                message = DateTime.Now.ToString("yyyy-MM-dd HH':'mm") + " stop " + _runningMinerProcess.StartInfo.FileName;
+                EasyLog.Log(@"c:\\Log\\minerlog.txt", message);
+                _runningMinerProcess = null;
+            }
+            Assert.AreEqual(null, _runningMinerProcess);
+        }
     }
 }

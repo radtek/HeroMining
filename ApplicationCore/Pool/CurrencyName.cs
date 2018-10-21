@@ -14,6 +14,7 @@ namespace CryptoMining.ApplicationCore.Pool
             _coins.Add("ABS");
             _coins.Add("ABY");
             _coins.Add("ACED");
+            _coins.Add("ACM");
             _coins.Add("ADE");
             _coins.Add("ADV");
             _coins.Add("ADZ");
@@ -72,6 +73,7 @@ namespace CryptoMining.ApplicationCore.Pool
             _coins.Add("CURV");
             _coins.Add("CXT");
             _coins.Add("DASH");
+            _coins.Add("DAVIES");
             _coins.Add("DEFT");
             _coins.Add("DGB");
             _coins.Add("DGMS");
@@ -125,6 +127,7 @@ namespace CryptoMining.ApplicationCore.Pool
             _coins.Add("GRV");
             _coins.Add("GTM");
             _coins.Add("GUN");
+            _coins.Add("GUT");
             _coins.Add("H2O");
             _coins.Add("HAL");
             _coins.Add("HANA");
@@ -135,6 +138,7 @@ namespace CryptoMining.ApplicationCore.Pool
             _coins.Add("HLX");
             _coins.Add("HOLD");
             _coins.Add("HPC");
+            _coins.Add("HTA");
             _coins.Add("HTH");
             _coins.Add("HUSH");
             _coins.Add("IC");

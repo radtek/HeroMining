@@ -1,5 +1,5 @@
 {
-  "SwapTime": 0.1,
+  "SwapTime": 24,
   "UseCurrent": false,
   "Path": [
     {
@@ -13,6 +13,10 @@
     {
       "Key": "bcd@zpool",
       "Value": "C:\\SoftwareMiner\\t-rex-0.7.0-win-cuda9.2\\start-bcd-bcd-zpool.bat"
+    },
+    {
+      "Key": "x16r@phiphi",
+      "Value": "C:\\SoftwareMiner\\t-rex-0.7.0-win-cuda9.2\\start-btc-x16r-phiphi.bat"
     }
   ],
   "Exclude": [

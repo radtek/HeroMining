@@ -28,7 +28,16 @@ namespace CryptoMiningTest
             Assert.AreEqual(0, i);
         }
 
+        [TestMethod]
+        public void TestDigitCasting()
+        {
+            double d = 0.001;
+            int x = (int)(d * 3600000);
+            Assert.AreEqual(0, x > 0);
+        }
 
+
+        
       
 
     }

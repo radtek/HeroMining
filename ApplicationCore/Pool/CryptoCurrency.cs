@@ -26,6 +26,12 @@ namespace CryptoMining.ApplicationCore.Pool
 
         }
 
+        public class ACM : CurrencyBase
+        {
+
+        }
+
+
         public class ADE : CurrencyBase
         {
 
@@ -504,6 +510,11 @@ namespace CryptoMining.ApplicationCore.Pool
 
         }
 
+        public class DAVIES : CurrencyBase
+        {
+
+        }
+
         public class DEFT : CurrencyBase
         {
 
@@ -774,6 +785,11 @@ namespace CryptoMining.ApplicationCore.Pool
 
         }
 
+        public class GUT : CurrencyBase
+        {
+
+        }
+
         public class H2O : CurrencyBase
         {
 
@@ -821,6 +837,11 @@ namespace CryptoMining.ApplicationCore.Pool
         }
 
         public class HPC : CurrencyBase
+        {
+
+        }
+
+        public class HTA : CurrencyBase
         {
 
         }
@@ -1860,6 +1881,9 @@ namespace CryptoMining.ApplicationCore.Pool
         [JsonProperty("GUN")]
         public GUN Gun { get; set; }
 
+        [JsonProperty("GUT")]
+        public GUT Gut { get; set; }
+
         [JsonProperty("H2O")]
         public H2O H2o { get; set; }
 
@@ -1889,6 +1913,9 @@ namespace CryptoMining.ApplicationCore.Pool
 
         [JsonProperty("HPC")]
         public HPC Hpc { get; set; }
+
+        [JsonProperty("HTA")]
+        public HTA Hta { get; set; }
 
         [JsonProperty("HTH")]
         public HTH Hth { get; set; }
@@ -2385,6 +2412,9 @@ namespace CryptoMining.ApplicationCore.Pool
         [JsonProperty("ACED")]
         public ACED Aced { get; set; }
 
+        [JsonProperty("ACM")]
+        public ACM Acm { get; set; }
+
         [JsonProperty("ADE")]
         public ADE Ade { get; set; }
 
@@ -2435,6 +2465,9 @@ namespace CryptoMining.ApplicationCore.Pool
 
         [JsonProperty("DASH")]
         public DASH Dash { get; set; }
+
+        [JsonProperty("DAVIES")]
+        public DAVIES Davies { get; set; }
 
         [JsonProperty("DEFT")]
         public DEFT Deft { get; set; }
@@ -2554,6 +2587,8 @@ namespace CryptoMining.ApplicationCore.Pool
                         return Aby;
                     case "ACED":
                         return Aced;
+                    case "ACM":
+                        return Acm;
                     case "ADE":
                         return Ade;
                     case "ADV":
@@ -2588,6 +2623,8 @@ namespace CryptoMining.ApplicationCore.Pool
                         return Cxt;
                     case "DASH":
                         return Dash;
+                    case "DAVIES":
+                        return Davies;
                     case "DEFT":
                         return Deft;
                     case "DGB":
@@ -2854,6 +2891,8 @@ namespace CryptoMining.ApplicationCore.Pool
                         return Gtm;
                     case "GUN":
                         return Gun;
+                    case "GUT":
+                        return Gut;
                     case "H2O":
                         return H2o;
                     case "HAL":
@@ -2874,6 +2913,8 @@ namespace CryptoMining.ApplicationCore.Pool
                         return Hold;
                     case "HPC":
                         return Hpc;
+                    case "HTA":
+                        return Hta;
                     case "HTH":
                         return Hth;
                     case "HUSH":

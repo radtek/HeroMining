@@ -1,0 +1,1 @@
+Dotnet HeroMiningCLI.dll -g 10 -c baht -dig miner2.json

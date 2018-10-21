@@ -256,6 +256,12 @@ namespace CryptoMining.ApplicationCore.Pool
 
         }
 
+        public class X13bcd : AlgorithmBase
+        {
+
+
+        }
+
         public class X16r : AlgorithmBase
         {
 
@@ -426,6 +432,9 @@ namespace CryptoMining.ApplicationCore.Pool
         [JsonProperty("x13")]
         public X13 x13 { get; set; }
 
+        [JsonProperty("x13bcd")]
+        public X13bcd x13bcd { get; set; }
+        
         [JsonProperty("x16r")]
         public X16r x16r { get; set; }
 
@@ -540,6 +549,8 @@ namespace CryptoMining.ApplicationCore.Pool
                         return x11evo;
                     case "x13":
                         return x13;
+                    case "x13bcd":
+                        return x13bcd;
                     case "x16r":
                         return x16r;
                     case "x16s":

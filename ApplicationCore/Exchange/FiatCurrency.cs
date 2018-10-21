@@ -6,7 +6,7 @@ namespace CryptoMining.ApplicationCore.Exchange
 {
     public enum FiatCurrency
     {
-        Baht,
-        Usd
+        THB,
+        USD
     }
 }

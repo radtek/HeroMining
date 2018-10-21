@@ -1,0 +1,19 @@
+{
+  "SwapTime": 1,
+  "UseCurrent": false,
+  "Path": [
+    {
+      "Key": "coin@pool",
+      "Value": "Path to your bat file"
+    },
+    {
+      "Key": "algor@pool",
+      "Value": "Path to your bat file"
+    }
+  ],
+  "Exclude": [
+    "exclude1@pool",
+    "exclude2@pool"
+  ]
+
+}

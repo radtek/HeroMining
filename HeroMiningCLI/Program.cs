@@ -1,5 +1,6 @@
 ﻿using CryptoMining.ApplicationCore;
 using CryptoMining.ApplicationCore.Exchange;
+using CryptoMining.ApplicationCore.Miner;
 using CryptoMining.ApplicationCore.Pool;
 using Newtonsoft.Json;
 using System;
@@ -20,8 +21,11 @@ namespace HeroMiningCLI
         private static int _keepMoreThan = -1;
         private static bool _needMonitor = false;
         private static string _monitorCoin = "";
-        private static FiatCurrency _fiat = FiatCurrency.Baht;
+        private static FiatCurrency _fiat = FiatCurrency.THB;
         private static List<CryptoCurrencyResult> _coinsResult = new List<CryptoCurrencyResult>();
+        private static List<AlgorithmResult> _algorsResult = new List<AlgorithmResult>();
+        private static bool _needDig = false;
+        private static MinerModel _miners;
 
         static void ParseArgument(string[] args)
         {
@@ -49,7 +53,6 @@ namespace HeroMiningCLI
                     {
                         try
                         {
-                            _needWriteFile = true;
                             _keepMoreThan = int.Parse(args[i + 1]);
                         }
                         catch (IndexOutOfRangeException)
@@ -91,17 +94,95 @@ namespace HeroMiningCLI
                         try
                         {
                             string fiatCurrency = args[i + 1].ToLower();
-                            _fiat = (fiatCurrency == "usd") ? FiatCurrency.Usd : FiatCurrency.Baht;
+                            _fiat = (fiatCurrency == "usd") ? FiatCurrency.USD : FiatCurrency.THB;
                         }
                         catch
                         {
                             Console.WriteLine("please specify a valid parameter -c eg. -c usd or -c baht");
                         }
                     }
+                    else if (args[i] == "-dig")
+                    {
+                        string minerConfig = "";
+                        try
+                        {
+                            minerConfig = args[i + 1].ToLower();
+                            string json = System.IO.File.ReadAllText(minerConfig);
+                            _miners = JsonConvert.DeserializeObject<MinerModel>(json);
+                            _needDig = true;
+                        }
+                        catch (Exception err)
+                        {
+                            Console.WriteLine(string.Format("Invalid configuration please verify file {0}. Reason: {1}", minerConfig, err.Message));
+                            Console.WriteLine("Press Enter to exit.");
+                            Console.ReadLine();
+                            System.Environment.Exit(-1);
+                        }
+                    }
                 }
             }
+        }
 
+        private static void ExploreMiningDetail(string algorithmName, PoolName pool)
+        {
+            double btcCurrentPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, pool, true, _fiat);
+            double btc24HoursPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, pool, false, _fiat);
+            if (btc24HoursPerDay > _keepMoreThan || btcCurrentPerDay > _keepMoreThan)
+            {
+                AlgorithmResult algorAtBlockMaster = new AlgorithmResult();
+                algorAtBlockMaster.name = algorithmName;
+                algorAtBlockMaster.Pool = pool;
+                algorAtBlockMaster.estimate_current = btcCurrentPerDay;
+                algorAtBlockMaster.estimate_last24h = btc24HoursPerDay;
+                _algorsResult.Add(algorAtBlockMaster);
+            }
+        }
 
+        private static void DoMining()
+        {
+            string bestAlgor = "";
+            string bestCoin = "";
+            double bestAlgorPrice = 0;
+            double bestCoinPrice = 0;
+            try
+            {
+                (bestAlgor, bestAlgorPrice) = MinerControl.FindBestPrice(_algorsResult, true, _miners);
+                (bestCoin, bestCoinPrice) = MinerControl.FindBestPrice(_coinsResult, _miners);
+                if (bestAlgorPrice > bestCoinPrice)
+                {
+
+                    if (MinerControl.DoMining(bestAlgor, _miners.Path))
+                    {
+                        Console.WriteLine($"Start mining {bestAlgor} estimate {bestAlgorPrice} per day.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Warning: Found best algor {bestAlgor} but not found miner config.");
+                    }
+                }
+                else
+                {
+
+                    if (MinerControl.DoMining(bestCoin, _miners.Path))
+                    {
+                        Console.WriteLine($"Start mining {bestCoin} estimate {bestCoinPrice} per day.");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Warning: Found best coin {bestCoin} but not found miner config.");
+                    }
+                }
+
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine($"Error : Can not start mining {bestAlgor} estimate {bestAlgorPrice} per day.");
+                Console.WriteLine($"Error : {err.Message}. Error detail : {err.InnerException.Message}");
+                Console.WriteLine();
+                Console.WriteLine("Press Enter to exit.");
+                Console.ReadLine();
+                System.Environment.Exit(-1);
+            }
         }
 
         private static void ExploreMiningDetail(CryptoCurrency coins, string symbol, PoolName pool, ExchangeName exchange)
@@ -141,42 +222,43 @@ namespace HeroMiningCLI
             BsodAPI bsod = new BsodAPI();
             GosAPI gos = new GosAPI();
 
-            List<AlgorithmResult> algorResult = new List<AlgorithmResult>();
+            Console.WriteLine("Start loading pool data. Please wait ...");
+            _calc = new MiningCalculator();
 
             ParseArgument(args);
 
-
             Rig myRig = ReadRigConfig("myrig.json");
-
             HashPower.SetupHardware(myRig);
 
-            Console.WriteLine("Start loading pool data. Please wait ...");
-            _calc = new MiningCalculator();
-            CryptoCurrency bsodCoins = _calc.PoolCoins[0];
-            CryptoCurrency gosCoins = _calc.PoolCoins[1];
-            CryptoCurrency iceCoins = _calc.PoolCoins[2];
-            Algorithm zergAlgorithm = _calc.PoolAlgorithms[0];
-            Algorithm phiAlgorithm = _calc.PoolAlgorithms[1];
-            Algorithm zpoolAlgorithm = _calc.PoolAlgorithms[2];
-            Algorithm ahashAlgorithm = _calc.PoolAlgorithms[3];
-
-
-            Console.WriteLine("Analyzing ...");
-
-            if (_needMonitor) // monitor mode
+            string input = "";
+            while (input != Environment.NewLine && input != "q")
             {
-                foreach (GpuInfo gpu in myRig.Chipsets)
-                {
-                    Console.WriteLine(string.Format("{0} x {1} ", gpu.Name, gpu.Count));
-                }
-                string algorithmName = _monitorCoin.ToLower();
 
-                Console.WriteLine("Monitoring " + zergAlgorithm[algorithmName] != null ? algorithmName : _monitorCoin);
-                Console.WriteLine();
-                string input = "";
-                string symbol = _monitorCoin;
-                while (input != Environment.NewLine && input != "q")
+                CryptoCurrency bsodCoins = _calc.PoolCoins[0];
+                CryptoCurrency gosCoins = _calc.PoolCoins[1];
+                CryptoCurrency iceCoins = _calc.PoolCoins[2];
+                Algorithm zergAlgorithm = _calc.PoolAlgorithms[0];
+                Algorithm phiAlgorithm = _calc.PoolAlgorithms[1];
+                Algorithm zpoolAlgorithm = _calc.PoolAlgorithms[2];
+                Algorithm ahashAlgorithm = _calc.PoolAlgorithms[3];
+                Algorithm blockMasterAlgorithm = _calc.PoolAlgorithms[4];
+
+                Console.WriteLine("Analyzing ...");
+
+                #region monitor mode
+                if (_needMonitor) // monitor mode
                 {
+                    foreach (GpuInfo gpu in myRig.Chipsets)
+                    {
+                        Console.WriteLine(string.Format("{0} x {1} ", gpu.Name, gpu.Count));
+                    }
+                    string algorithmName = _monitorCoin.ToLower();
+
+                    Console.WriteLine("Monitoring " + zpoolAlgorithm[algorithmName] != null ? algorithmName : _monitorCoin);
+                    Console.WriteLine();
+
+                    string symbol = _monitorCoin;
+
                     _coinsResult.Clear();
 
                     ExploreMining(bsodCoins, symbol, PoolName.Bsod);
@@ -202,7 +284,7 @@ namespace HeroMiningCLI
                         algorAtZerg.Pool = PoolName.Zerg;
                         algorAtZerg.estimate_current = btcCurrentPerDay;
                         algorAtZerg.estimate_last24h = btc24HoursPerDay;
-                        algorResult.Add(algorAtZerg);
+                        _algorsResult.Add(algorAtZerg);
 
                         if (_needToShowCoinsNumPerDay)
                         {
@@ -222,7 +304,7 @@ namespace HeroMiningCLI
                         algorAtPhi.Pool = PoolName.PhiPhi;
                         algorAtPhi.estimate_current = btcCurrentPerDay;
                         algorAtPhi.estimate_last24h = btc24HoursPerDay;
-                        algorResult.Add(algorAtPhi);
+                        _algorsResult.Add(algorAtPhi);
 
                         if (_needToShowCoinsNumPerDay)
                         {
@@ -242,11 +324,30 @@ namespace HeroMiningCLI
                         algorAtAhash.Pool = PoolName.AhashPool;
                         algorAtAhash.estimate_current = btcCurrentPerDay;
                         algorAtAhash.estimate_last24h = btc24HoursPerDay;
-                        algorResult.Add(algorAtAhash);
+                        _algorsResult.Add(algorAtAhash);
 
                         if (_needToShowCoinsNumPerDay)
                         {
                             ShowNumOfBtcMiningPerDay(algorithmName, PoolName.AhashPool);
+                        }
+                    }
+
+                    if (blockMasterAlgorithm[algorithmName] != null)
+                    {
+                        _calc.MyHashRate = HashPower.GetAlgorithmHashRate(algorithmName);
+                        double btcCurrentPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.BlockMaster, true, _fiat);
+                        double btc24HoursPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.BlockMaster, false, _fiat);
+
+                        AlgorithmResult algorAtBlockMaster = new AlgorithmResult();
+                        algorAtBlockMaster.name = algorithmName;
+                        algorAtBlockMaster.Pool = PoolName.BlockMaster;
+                        algorAtBlockMaster.estimate_current = btcCurrentPerDay;
+                        algorAtBlockMaster.estimate_last24h = btc24HoursPerDay;
+                        _algorsResult.Add(algorAtBlockMaster);
+
+                        if (_needToShowCoinsNumPerDay)
+                        {
+                            ShowNumOfBtcMiningPerDay(algorithmName, PoolName.BlockMaster);
                         }
                     }
 
@@ -261,7 +362,7 @@ namespace HeroMiningCLI
                         algorAtZpool.Pool = PoolName.Zpool;
                         algorAtZpool.estimate_current = btcCurrentPerDay;
                         algorAtZpool.estimate_last24h = btc24HoursPerDay;
-                        algorResult.Add(algorAtZpool);
+                        _algorsResult.Add(algorAtZpool);
 
                         if (_needToShowCoinsNumPerDay)
                         {
@@ -269,8 +370,8 @@ namespace HeroMiningCLI
                         }
                     }
 
-                    algorResult.Sort();
-                    foreach (AlgorithmResult algor in algorResult)
+                    _algorsResult.Sort();
+                    foreach (AlgorithmResult algor in _algorsResult)
                     {
                         string line = string.Format("{0} {1}(24hr)\t{2} {3}(current) \t{4}@{5}", algor.estimate_last24h.ToString("N2"), _fiat, algor.estimate_current.ToString("N2"), _fiat, algor.name, algor.Pool);
                         Console.WriteLine(line);
@@ -279,122 +380,104 @@ namespace HeroMiningCLI
                     }
 
 
-                    Console.WriteLine();
-                    Console.WriteLine("Press Control + C if u need to exit.");
-                    Console.WriteLine("Re calculate. Please wait 1 minutes ...");
-                    System.Threading.Thread.Sleep(60000);
                     _calc.RefreshPool();
-                }
 
-                if (_needWriteFile)
+
+                    if (_needWriteFile)
+                    {
+                        System.IO.File.WriteAllText(_filename, _result.ToString());
+                        Console.WriteLine("File {0} saved.", _filename);
+                    }
+                }
+                #endregion monitor mode
+
+                #region normal mode
+                else // normal mode
                 {
-                    System.IO.File.WriteAllText(_filename, _result.ToString());
-                    Console.WriteLine("File {0} saved.", _filename);
+                    foreach (string symbol in CurrencyName.Symbols)
+                    {
+
+                        ExploreMining(bsodCoins, symbol, PoolName.Bsod);
+                        ExploreMining(gosCoins, symbol, PoolName.Gos);
+                        ExploreMining(iceCoins, symbol, PoolName.IceMining);
+                    }
+
+                    _coinsResult.Sort();
+
+                    // display
+
+                    Console.WriteLine();
+                    Console.WriteLine("Analyzing gpu ...");
+                    foreach (GpuInfo gpu in myRig.Chipsets)
+                    {
+                        Console.WriteLine(string.Format("{0} x {1} ", gpu.Name, gpu.Count));
+                    }
+                    Console.WriteLine();
+
+                    foreach (CryptoCurrencyResult coin in _coinsResult)
+                    {
+                        string line = string.Format("{0} {1}(24hr)\t{2}@{3} \tsale@{4}", coin.h24_btc.ToString("N2"), _fiat, coin.symbol, coin.Pool, coin.Exchange);
+                        _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", coin.symbol, coin.algo, coin.Pool, coin.Exchange, coin.h24_btc.ToString("F2")));
+                        Console.WriteLine(line);
+                    }
+
+                    Console.WriteLine();
+                    Console.WriteLine("Analyzing auto btc pool ...");
+                    Console.WriteLine();
+
+                    foreach (string algorithmName in AlgoritmName.Symbols)
+                    {
+                        _calc.MyHashRate = HashPower.GetAlgorithmHashRate(algorithmName);
+                        ExploreMiningDetail(algorithmName, PoolName.Zerg);
+                        ExploreMiningDetail(algorithmName, PoolName.PhiPhi);
+                        ExploreMiningDetail(algorithmName, PoolName.AhashPool);
+                        ExploreMiningDetail(algorithmName, PoolName.Zpool);
+                        ExploreMiningDetail(algorithmName, PoolName.BlockMaster);
+                    }
+
+                    _algorsResult.Sort();
+                    foreach (AlgorithmResult algor in _algorsResult)
+                    {
+                        string line = string.Format("{0} {1}(24hr)  \t{2} {3}(current) \t{4}@{5}", algor.estimate_last24h.ToString("N2"), _fiat, algor.estimate_current.ToString("N2"), _fiat, algor.name, algor.Pool);
+                        Console.WriteLine(line);
+                        _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", algor.name, algor.Pool, "bx", algor.estimate_last24h.ToString("F2"), algor.estimate_current.ToString("F2")));
+                    }
+
+
+                    if (_needWriteFile)
+                    {
+                        System.IO.File.WriteAllText(_filename, _result.ToString());
+                        Console.WriteLine("File {0} saved.", _filename);
+                    }
+
+                }
+                #endregion normal mode
+
+                #region dig mode
+                if (_needDig)
+                {
+                    Console.WriteLine();
+                    DoMining();
+                }
+                #endregion dig mode
+
+                if (_miners != null)
+                {
+                    Console.WriteLine();
+                    Console.WriteLine(string.Format("Next watch in {0} hour.", _miners.SwapTime));
+                    int sleepTime = _miners.SwapTime > int.MaxValue ? 3600000 : (int)(_miners.SwapTime * 3600000);
+                    System.Threading.Thread.Sleep(sleepTime);
+
+                    Console.WriteLine("Start reloading pool data. Please wait ...");
+                    _calc.RefreshPool();
+                    _calc.RefreshPrice();
+                }
+                else
+                {
+                    Console.ReadLine();
+                    return;
                 }
             }
-            else // normal mode
-            {
-                foreach (string symbol in CurrencyName.Symbols)
-                {
-
-                    ExploreMining(bsodCoins, symbol, PoolName.Bsod);
-                    ExploreMining(gosCoins, symbol, PoolName.Gos);
-                    ExploreMining(iceCoins, symbol, PoolName.IceMining);
-                }
-
-                _coinsResult.Sort();
-
-                // display
-
-                Console.WriteLine();
-                Console.WriteLine("Analyzing gpu ...");
-                foreach (GpuInfo gpu in myRig.Chipsets)
-                {
-                    Console.WriteLine(string.Format("{0} x {1} ", gpu.Name, gpu.Count));
-                }
-                Console.WriteLine();
-
-                foreach (CryptoCurrencyResult coin in _coinsResult)
-                {
-                    string line = string.Format("{0} {1}(24hr)\t{2}@{3} \tsale@{4}", coin.h24_btc.ToString("N2"), _fiat, coin.symbol, coin.Pool, coin.Exchange);
-                    _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", coin.symbol, coin.algo, coin.Pool, coin.Exchange, coin.h24_btc.ToString("F2")));
-                    Console.WriteLine(line);
-                }
-
-                Console.WriteLine();
-                Console.WriteLine("Analyzing auto btc pool ...");
-                Console.WriteLine();
-
-                foreach (string algorithmName in AlgoritmName.Symbols)
-                {
-                    _calc.MyHashRate = HashPower.GetAlgorithmHashRate(algorithmName);
-                    double btcCurrentPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.Zerg, true, _fiat);
-                    double btc24HoursPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.Zerg, false, _fiat);
-                    if (btc24HoursPerDay > _keepMoreThan || btcCurrentPerDay > _keepMoreThan)
-                    {
-                        AlgorithmResult algorAtZerg = new AlgorithmResult();
-                        algorAtZerg.name = algorithmName;
-                        algorAtZerg.Pool = PoolName.Zerg;
-                        algorAtZerg.estimate_current = btcCurrentPerDay;
-                        algorAtZerg.estimate_last24h = btc24HoursPerDay;
-                        algorResult.Add(algorAtZerg);
-                    }
-
-                    btcCurrentPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.PhiPhi, true, _fiat);
-                    btc24HoursPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.PhiPhi, false, _fiat);
-                    if (btc24HoursPerDay > _keepMoreThan || btcCurrentPerDay > _keepMoreThan)
-                    {
-                        AlgorithmResult algorAtPhi = new AlgorithmResult();
-                        algorAtPhi.name = algorithmName;
-                        algorAtPhi.Pool = PoolName.PhiPhi;
-                        algorAtPhi.estimate_current = btcCurrentPerDay;
-                        algorAtPhi.estimate_last24h = btc24HoursPerDay;
-                        algorResult.Add(algorAtPhi);
-                    }
-
-                    btcCurrentPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.AhashPool, true, _fiat);
-                    btc24HoursPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.AhashPool, false, _fiat);
-                    if (btc24HoursPerDay > _keepMoreThan || btcCurrentPerDay > _keepMoreThan)
-                    {
-                        AlgorithmResult algorAtAhash = new AlgorithmResult();
-                        algorAtAhash.name = algorithmName;
-                        algorAtAhash.Pool = PoolName.AhashPool;
-                        algorAtAhash.estimate_current = btcCurrentPerDay;
-                        algorAtAhash.estimate_last24h = btc24HoursPerDay;
-                        algorResult.Add(algorAtAhash);
-                    }
-
-                    btcCurrentPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.Zpool, true, _fiat);
-                    btc24HoursPerDay = _calc.GetTotalFiatMoneyMiningPerday(algorithmName, PoolName.Zpool, false, _fiat);
-                    if (btc24HoursPerDay > _keepMoreThan || btcCurrentPerDay > _keepMoreThan)
-                    {
-                        AlgorithmResult algorAtZpool = new AlgorithmResult();
-                        algorAtZpool.name = algorithmName;
-                        algorAtZpool.Pool = PoolName.Zpool;
-                        algorAtZpool.estimate_current = btcCurrentPerDay;
-                        algorAtZpool.estimate_last24h = btc24HoursPerDay;
-                        algorResult.Add(algorAtZpool);
-                    }
-
-                }
-
-                algorResult.Sort();
-                foreach (AlgorithmResult algor in algorResult)
-                {
-                    string line = string.Format("{0} {1}(24hr)  \t{2} {3}(current) \t{4}@{5}", algor.estimate_last24h.ToString("N2"), _fiat, algor.estimate_current.ToString("N2"), _fiat, algor.name, algor.Pool);
-                    Console.WriteLine(line);
-                    _result.AppendLine(string.Format("{0},{1},{2},{3},{4}", algor.name, algor.Pool, "bx", algor.estimate_last24h.ToString("F2"), algor.estimate_current.ToString("F2")));
-                }
-
-
-                if (_needWriteFile)
-                {
-                    System.IO.File.WriteAllText(_filename, _result.ToString());
-                    Console.WriteLine("File {0} saved.", _filename);
-                }
-                Console.ReadLine();
-            }
-
         }
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
@@ -414,13 +497,14 @@ namespace HeroMiningCLI
             Console.WriteLine("-m         \tMonitor a specific coin. example -m rvn");
             Console.WriteLine("-t         \tShow number of coin that will receive mining per day");
             Console.WriteLine("-c         \tcalculate fiat currency revenue to usd or baht. example -c usd or -c baht");
+            Console.WriteLine("-dig       \tRun miner with the best price. example -dig miner.json");
             Console.WriteLine("-debug     \tshow debug message.");
         }
 
         private static void ShowNumOfCoinMiningPerDay(string coinSymbol, PoolName poolName)
         {
             double coinsPerDay = _calc.GetNumOfCoinMiningPerDay(coinSymbol, poolName);
-            Console.WriteLine(string.Format("mining@{0} will receive {1} {2} per day.", poolName.ToString(), coinsPerDay, coinSymbol));
+            Console.WriteLine(string.Format("{2}@{0} will receive {1} {2} per day.", poolName.ToString(), coinsPerDay, coinSymbol));
         }
 
         private static void ShowNumOfBtcMiningPerDay(string algorithmName, PoolName poolName)

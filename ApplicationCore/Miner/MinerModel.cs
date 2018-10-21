@@ -10,13 +10,21 @@ namespace CryptoMining.ApplicationCore.Miner
         /// <summary>
         /// get or set bot time to swap miner. default 1 hour.
         /// </summary>
-        private int _swapTime;
+        private double _swapTime;
 
-        public int SwapTime
+        /// <summary>
+        /// Swap hour time eg: 24 = 1 day.
+        /// </summary>
+        public double SwapTime
         {
             get { return _swapTime; }
             set { _swapTime = value; }
         }
+
+        /// <summary>
+        /// True if use current estimate else use 24 hour to compare best price
+        /// </summary>
+        public bool UseCurrent { get; set; }
 
         /// <summary>
         /// List of key (algor@pool) and value (miner path).

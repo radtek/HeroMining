@@ -4,16 +4,16 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.0</TargetFramework>
     <StartupObject>HeroMiningCLI.Program</StartupObject>
-    <Version>1.6.0</Version>
-    <AssemblyVersion>1.6.0.0</AssemblyVersion>
-    <FileVersion>1.6.0.0</FileVersion>
+    <Version>1.9.9</Version>
+    <AssemblyVersion>1.9.9.0</AssemblyVersion>
+    <FileVersion>1.9.9.0</FileVersion>
     <Copyright>fatherofhero</Copyright>
     <PackageLicenseUrl>https://github.com/soemsri/HeroMining/blob/master/LICENSE</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/soemsri/HeroMining</PackageProjectUrl>
     <RepositoryUrl>https://github.com/soemsri/HeroMining</RepositoryUrl>
     <PackageTags>HeroMining</PackageTags>
     <PackageReleaseNotes>hardware support :  1080ti, 1070ti, 1070, 1060, 1050ti, Rx Vega 64, Rx Vega 56, Rx 580, Rx 480, Rx 470
-pool support :         Gos,  Bsod,  PhiPhi,  Zerg, Ahashpool, Zpool
+pool support :         Gos,  Bsod,  PhiPhi,  Zerg, Ahashpool, Zpool, BlockMaster
 exchange support : crypto-bridge, cryptopia, crex24, binance, coinexchange</PackageReleaseNotes>
     <PublishWithAspNetCoreTargetManifest>false</PublishWithAspNetCoreTargetManifest>
   </PropertyGroup>

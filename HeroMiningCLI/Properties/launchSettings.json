@@ -1,7 +1,8 @@
 {
   "profiles": {
     "HeroMiningCLI": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "-dig miner.json"
     }
   }
 }

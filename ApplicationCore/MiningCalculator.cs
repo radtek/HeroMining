@@ -22,6 +22,7 @@ namespace CryptoMining.ApplicationCore
         private PhiPhiAPI _phiAPI = new PhiPhiAPI();
         private AhashPoolAPI _ahashAPI = new AhashPoolAPI();
         private ZpoolAPI _zpoolAPI = new ZpoolAPI();
+        private BlockMasterAPI _blockMasterAPI = new BlockMasterAPI();
         private BxAPI _bxAPI = new BxAPI();
         private List<CryptoBridgeCurrency> _cryptoBridgeCoinsPrice = new List<CryptoBridgeCurrency>();
         private List<Crex24Currency> _crex24CoinsPrice = new List<Crex24Currency>();
@@ -35,6 +36,7 @@ namespace CryptoMining.ApplicationCore
         private Algorithm _phiAlgorithm = new Algorithm();
         private Algorithm _zpoolAlgorithm = new Algorithm();
         private Algorithm _ahashAlgorithm = new Algorithm();
+        private Algorithm _blockMasterAlgorithm = new Algorithm();
 
 
         private double _thaiBahtPerBTC = 0;
@@ -161,6 +163,18 @@ namespace CryptoMining.ApplicationCore
             }
         }
 
+        private void LoadBlockMasterAlgorithm()
+        {
+            try
+            {
+                _blockMasterAlgorithm = _blockMasterAPI.LoadAlgorithm();
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Warning: " + err.Message);
+            }
+        }
+
         private void LoadAhashAlgorithm()
         {
             try
@@ -198,6 +212,7 @@ namespace CryptoMining.ApplicationCore
                 () => LoadGosCurrencies(),
                 () => LoadIceMiningCurrencies(),
                 //     () => LoadZergAlgorithm(),
+                () => LoadBlockMasterAlgorithm(),
                 () => LoadPhiPhiAlgorithm(),
                 () => LoadZpoolAlgorithm(),
                 () => LoadAhashAlgorithm());
@@ -221,7 +236,7 @@ namespace CryptoMining.ApplicationCore
         {
             get
             {
-                return new List<Algorithm> { _zergAlgorithm, _phiAlgorithm, _zpoolAlgorithm, _ahashAlgorithm };
+                return new List<Algorithm> { _zergAlgorithm, _phiAlgorithm, _zpoolAlgorithm, _ahashAlgorithm, _blockMasterAlgorithm };
             }
         }
 
@@ -318,6 +333,8 @@ namespace CryptoMining.ApplicationCore
                 () => LoadGosCurrencies(),
                 () => LoadIceMiningCurrencies(),
                 () => LoadAhashAlgorithm(),
+                () => LoadBlockMasterAlgorithm(),
+                () => LoadPhiPhiAlgorithm(),
             //    () => LoadZergAlgorithm(),
                 () => LoadZpoolAlgorithm());
         }
@@ -431,6 +448,10 @@ namespace CryptoMining.ApplicationCore
             {
                 algor = _zpoolAlgorithm[algorithmName];
             }
+            else if (poolName == PoolName.BlockMaster)
+            {
+                algor = _blockMasterAlgorithm[algorithmName];
+            }
             if (algor != null)
             {
                 if (estimateCurrent)
@@ -467,7 +488,7 @@ namespace CryptoMining.ApplicationCore
         public double GetTotalFiatMoneyMiningPerday(string coinSymbol, PoolName poolName, ExchangeName exchangeName, FiatCurrency fiat)
         {
             double totalBtcPerDay = GetTotalBtcMiningPerday(coinSymbol, poolName, exchangeName);
-            double fiatPerBTC = (fiat == FiatCurrency.Baht) ? _thaiBahtPerBTC : _usdPerBTC;
+            double fiatPerBTC = (fiat == FiatCurrency.THB) ? _thaiBahtPerBTC : _usdPerBTC;
             return totalBtcPerDay * fiatPerBTC;
         }
 
@@ -483,7 +504,7 @@ namespace CryptoMining.ApplicationCore
         public double GetTotalFiatMoneyMiningPerday(string algorithmName, PoolName poolName, bool estimateCurrent, FiatCurrency fiat)
         {
             double totalBtcPerDay = GetTotalBtcMiningPerday(algorithmName, poolName, estimateCurrent);
-            double fiatPerBTC = (fiat == FiatCurrency.Baht) ? _thaiBahtPerBTC : _usdPerBTC; 
+            double fiatPerBTC = (fiat == FiatCurrency.THB) ? _thaiBahtPerBTC : _usdPerBTC; 
             return totalBtcPerDay * fiatPerBTC;
         }
 
